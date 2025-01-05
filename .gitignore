@@ -1,0 +1,19 @@
+# Ignore .env file which contains API keys
+.env
+
+# Ignore the output folder
+output/
+
+# Ignore temp files
+*.reg
+
+# Ignore python cache
+__pycache__/
+
+# Ignore json responses (created during the execution of the app)
+*.json
+
+#Ignore temp files made by moviepy
+temp-*
+
+ido/

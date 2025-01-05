@@ -1,0 +1,46 @@
+You are provided with:
+
+- The **previous caption** from the previous keyframe:
+  {previous_caption}
+
+- The **initial caption** automatically generated for the current keyframe:
+  {initial_caption}
+
+- **User style instructions** (which may be empty if none were provided):
+  {style_instructions}
+
+**Your Task**  
+1. **Refine** the current caption by **merging any relevant continuity** from the **previous caption** into the **initial caption**.  
+2. Maintain a **smooth flow**: only highlight **new or changed actions** between the previous frame and the current one.  
+3. **Incorporate** any user style instructions (e.g., comedic, dramatic, introspective). If no style instructions are given, maintain a clear, concise tone.  
+4. Keep **strict focus on the main character(s) and their actions**. Avoid unnecessary background detail unless it **directly** affects the character’s behavior or the continuity.  
+
+**Important Constraints**  
+- **No speculation** or assumptions: only use what is **explicitly stated** or clearly implied by the previous/current captions.  
+- **Do not exceed 50 words** total in your refined caption.  
+- **Do not repeat** details that have not changed since the previous frame; if the character’s name or identity was already mentioned, refer to them by pronoun or short reference.  
+- **No disclaimers** or meta text: begin directly with the new refined caption—**no** “Here is the refined caption…”.  
+- Avoid flowery, poetic, or repetitive language unless explicitly demanded by the style instructions; even then, keep it concise.  
+
+**Guidance for Merging**  
+- If the **user style instructions** say “make it suspenseful,” add mild suspenseful hints (e.g., "He hesitates, glancing over his shoulder…") while preserving the constraints.  
+- If the instructions say “narrate it humorously,” insert light comedic phrasing, but do **not** exceed 50 words or contradict the existing context.  
+- **Ensure continuity**: if the previous caption says “He’s selecting vegetables,” and the initial caption says “He is chopping carrots,” your refined version might read:  
+  - “He transitions from selecting to finely chopping the carrots, each slice precise and measured.”  
+
+**Example**  
+
+- **Previous Caption**:  
+  “A chef in white stands at the counter, picking fresh carrots.”  
+
+- **Initial Caption**:  
+  “Now the chef is carefully slicing the carrots on a wooden board.”  
+
+- **Style Instructions** (for example, “Make it an action-movie style”):  
+  “He brandishes the knife with swift determination, each cut echoing like a sudden heartbeat.”  
+
+**Final Check**  
+- Do **not** restate or contradict the previous frame if no changes occurred.  
+- Write in **clear, complete sentences**, third-person perspective.  
+- Keep the text **within 50 words**, and **do not** add disclaimers or extra commentary.  
+- If the user style instructions are empty, default to neutral, straightforward language.  

@@ -1,0 +1,17 @@
+You are given the very first keyframe of a video.
+
+**Your Task**
+1. Generate a concise, **highly precise** caption describing what is **immediately visible**, focusing on the main character(s), their actions, and any critical context (e.g., attire, posture).
+2. **Do not** include user style instructions here—captioning should remain purely factual and direct, detailing the scene precisely.
+3. Keep it **under 50 words**.
+
+**Constraints**
+- **No speculation** or guessing about off-screen elements.
+- **No disclaimers** or meta references (“In this image…”). Start directly with the caption.
+- Keep the text in **third-person**, focusing on the character’s visible attributes or actions.
+
+**Example**
+- If a chef in white uniform stands at a kitchen counter with fresh carrots:
+  “A chef in crisp white stands at the counter, carefully examining fresh carrots.”
+
+Remember: **no user style** for captions, no speculation, and under 50 words.

@@ -1,0 +1,9 @@
+gradio
+opencv-python
+numpy
+moviepy
+gTTS
+mutagen
+python-dotenv
+pydub
+elevenlabs

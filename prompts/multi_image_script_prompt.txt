@@ -1,0 +1,73 @@
+You will receive a sequence of images representing keyframes extracted from a video. Your task is to create a highly detailed and realistic narration script that captures the essence of the video's content.
+
+**Your Objectives:**
+
+1. **Thorough Analysis**:
+   - Examine each image carefully in the order they are provided.
+   - Pay attention to fine details such as facial expressions, body language, and interactions between characters.
+   - Note any changes in setting, atmosphere, or mood.
+
+2. **Character Identification and Description**:
+   - Identify the main character(s) introduced at the beginning.
+   - Provide a detailed description when a character first appears.
+   - **For subsequent mentions, refer to the character(s) by name or appropriate pronouns without reintroducing them.**
+   - Capture their emotions, intentions, and actions throughout the sequence.
+
+3. **Action and Movement**:
+   - Describe the actions, movements, and gestures of the characters with precision.
+   - Highlight any significant events or changes occurring between frames.
+   - Ensure that the progression of actions is logical and coherent.
+
+4. **Setting and Environment**:
+   - Describe the setting and environment only if it is relevant to the actions or enhances the narrative.
+   - Include details about the location, time of day, weather conditions, or any notable background elements that impact the scene.
+   - **Avoid repeating descriptions of the setting unless there is a change.**
+
+5. **Continuity and Flow**:
+   - Ensure the narration flows naturally from one image to the next, maintaining continuity.
+   - **Use appropriate pronouns and transition words to maintain a smooth narrative without unnecessary repetition.**
+   - Maintain consistent tense and perspective throughout.
+
+6. **Language and Style**:
+   - Use vivid and descriptive language to create a clear picture in the reader's mind.
+   - Write in clear, complete sentences using the third person perspective.
+   - Employ a tone that matches the mood of the video (e.g., suspenseful, joyful, somber).
+
+7. **Word Count and Pacing**:
+   - Limit the total word count to a maximum of {max_words_total} words.
+   - Aim for a pacing of approximately 2 words per 0.75 seconds. NEVER EXCEED THIS LIMIT OF WORDS, ITS CRITICAL!!!!
+   - Adjust the level of detail to fit within the word limit while covering all key aspects.
+
+**Constraints and Guidelines:**
+
+- **Avoid Repetition**:
+  - **Do not reintroduce characters or settings that have already been introduced unless there are significant changes.**
+  - Use pronouns or character names for subsequent references.
+  - Avoid unnecessary repetition of information.
+
+- **Accuracy**:
+  - Only include information that is present and observable in the images.
+  - Do not speculate, assume, or infer details that cannot be confirmed visually.
+
+- **References**:
+  - Do not mention the images themselves or refer to them explicitly (e.g., "In the first image...").
+  - Do not include any metadata or external references.
+
+- **Formatting**:
+  - Write the script as continuous prose without bullet points, numbering, or headings.
+  - Do not include any introductory or concluding statements outside the narration.
+
+**Example Approach:**
+
+- **Introduction**:
+  - Begin by introducing the main character(s) and setting if appropriate.
+  - Provide detailed descriptions only when elements first appear or change significantly.
+
+- **Progression**:
+  - Describe actions and events as they occur, focusing on the flow and continuity.
+  - Use pronouns and transition words to connect sentences smoothly.
+
+- **Conclusion**:
+  - Conclude naturally, reflecting the final events depicted in the sequence.
+
+**Begin your detailed and immersive narration below:**
