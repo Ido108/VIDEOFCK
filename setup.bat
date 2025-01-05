@@ -36,12 +36,6 @@ type nul > .env
 :: Prompt for API keys and other configuration
 echo Please enter your API keys and configurations. You can leave empty if you wish to manually configure later.
 
-:: GEMINI_API_KEY
-set /p gemini_api_key="Enter your Gemini API key: "
-if not "%gemini_api_key%"=="" (
-    echo GEMINI_API_KEY=%gemini_api_key% >> .env
-)
-
 :: ELEVENLABS_API_KEY
 set /p elevenlabs_api_key="Enter your ElevenLabs API key: "
 if not "%elevenlabs_api_key%"=="" (
@@ -59,6 +53,13 @@ set /p claude_api_key="Enter your Claude API key: "
 if not "%claude_api_key%"=="" (
    echo CLAUDE_API_KEY=%claude_api_key% >> .env
 )
+
+:: GEMINI_API_KEY
+set /p gemini_api_key="Enter your Gemini API key: "
+if not "%gemini_api_key%"=="" (
+    echo GEMINI_API_KEY=%gemini_api_key% >> .env
+)
+
 
 :: LANGCHAIN_TRACING_V2
 set /p langchain_tracing_v2="Enable Langchain Tracing V2 (true/false): "
