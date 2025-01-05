@@ -233,7 +233,7 @@ def create_sequence_image(project_folder, keyframes_per_segment):
     first_keyframe.close()
 
     # Calculate the target width and height for each keyframe (adjust as needed)
-    target_keyframe_width = 427
+    target_keyframe_width = 900
     target_keyframe_height = int(original_keyframe_height * (target_keyframe_width / original_keyframe_width))
 
     # 2. Determine Layout and Canvas Size
