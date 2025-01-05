@@ -21,16 +21,33 @@ if ! command_exists pip; then
   exit 1
 fi
 
-# Step 3: Install Python dependencies
+# Step 3: Create virtual environment
+echo "Creating virtual environment..."
+python -m venv venv
+if [ $? -ne 0 ]; then
+  echo "Error: Failed to create virtual environment."
+  exit 1
+fi
+
+# Step 4: Activate virtual environment
+echo "Activating virtual environment..."
+source venv/bin/activate
+if [ $? -ne 0 ]; then
+  echo "Error: Failed to activate virtual environment."
+  exit 1
+fi
+
+
+# Step 5: Install Python dependencies
 echo "Installing required Python packages..."
-python -m pip install -r requirements.txt
+pip install -r requirements.txt
 if [ $? -ne 0 ]; then
   echo "Error: Failed to install Python packages. Please check the requirements.txt file and try again."
   exit 1
 fi
 echo "Python packages installed successfully."
 
-# Step 4: Create .env file
+# Step 6: Create .env file
 echo "Creating .env file..."
 touch .env
 
@@ -96,7 +113,7 @@ fi
 
 echo "Created .env file and added keys."
 
-# Step 5: Create config.py and fill it
+# Step 7: Create config.py and fill it
 echo "Creating and populating config.py..."
 cat > config.py << EOF
 # config.py
@@ -125,11 +142,12 @@ def verify_api_keys():
 EOF
 echo "config.py file created and populated"
 
-# Step 6: Create start script with application launch
+# Step 8: Create start script with application launch
 echo "Creating start.sh script with application launch..."
 cat > start.sh << EOF
 #!/bin/bash
 cd "\$(dirname "\$0")"
+source venv/bin/activate
 python app.py
 EOF
 chmod +x start.sh

@@ -19,9 +19,27 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-:: Step 3: Install Python dependencies
+:: Step 3: Create virtual environment
+echo Creating virtual environment...
+python -m venv venv
+if %errorlevel% neq 0 (
+    echo Error: Failed to create virtual environment.
+    pause
+    exit /b 1
+)
+
+:: Step 4: Activate virtual environment
+echo Activating virtual environment...
+call venv\Scripts\activate
+if %errorlevel% neq 0 (
+    echo Error: Failed to activate virtual environment.
+    pause
+    exit /b 1
+)
+
+:: Step 5: Install Python dependencies
 echo Installing required Python packages...
-python -m pip install -r requirements.txt
+pip install -r requirements.txt
 if %errorlevel% neq 0 (
     echo Error: Failed to install Python packages. Please check the requirements.txt file and try again.
     pause
@@ -29,7 +47,7 @@ if %errorlevel% neq 0 (
 )
 echo Python packages installed successfully.
 
-:: Step 4: Create .env file
+:: Step 6: Create .env file
 echo Creating .env file...
 type nul > .env
 
@@ -97,7 +115,7 @@ if %errorlevel% equ 0 (
 
 echo Created .env file and added keys.
 
-:: Step 5: Create config.py and fill it
+:: Step 7: Create config.py and fill it
 echo Creating and populating config.py...
 (
 echo # config.py
@@ -128,12 +146,13 @@ echo     return keys_present
 echo config.py file created and populated.
 
 
-:: Step 6: Create start.bat with icon and application launch
+:: Step 8: Create start.bat with icon and application launch
 echo Creating start.bat file with icon and application launch...
 
 (
 echo @echo off
 echo cd %~dp0
+echo call venv\Scripts\activate
 echo start "" "python" app.py
 ) > start.bat
 
