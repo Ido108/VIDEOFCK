@@ -11,10 +11,8 @@ from google.cloud import storage
 from PIL import Image
 from io import BytesIO  # Import BytesIO
 
-
-
-
 current_time = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+
 
 def extract_timestamp(filename):
     """Extracts the timestamp from a keyframe filename."""
@@ -26,6 +24,7 @@ def extract_timestamp(filename):
     else:
         logging.warning(f"No timestamp found in filename {filename}")
         return None
+
 def upload_to_gcs(local_path, project_folder, bucket_name="eighth-block-311611.appspot.com"):
     """
     Uploads an image to Google Cloud Storage and returns the public URL.
@@ -42,7 +41,9 @@ def upload_to_gcs(local_path, project_folder, bucket_name="eighth-block-311611.a
         return image_url, blob_name
     except Exception as e:
         logging.error(f"Error uploading to GCS: {e}")
-        return None
+        return None, None
+
+
 def delete_from_gcs(blob_name, bucket_name="eighth-block-311611.appspot.com"):
     """Deletes a file from Google Cloud Storage."""
     try:
@@ -55,6 +56,8 @@ def delete_from_gcs(blob_name, bucket_name="eighth-block-311611.appspot.com"):
     except Exception as e:
         logging.error(f"Error deleting file {blob_name} from GCS: {e}")
         return False
+
+
 # Initialize clients
 if CLAUDE_API_KEY:
     anthropic_client = anthropic.Anthropic(api_key=CLAUDE_API_KEY)
@@ -67,6 +70,7 @@ if OPENAI_API_KEY:
     openai_client = OpenAI(api_key=OPENAI_API_KEY)
 else:
     openai_client = None
+
 
 def generate_captions_and_narrations(
     project_folder,  # Now takes project folder instead of keyframes folder
@@ -95,12 +99,6 @@ def generate_captions_and_narrations(
         sequence_image = Image.open(sequence_image_path)
     except Exception as e:
         logging.error(f"Error opening sequence image: {e}")
-        return script_data, api_responses
-   
-    # Upload the sequence image to GCS and get its URL
-    sequence_image_url = upload_to_gcs(sequence_image_path, project_folder)
-    if sequence_image_url is None:
-        logging.error("Failed to upload sequence image to GCS.")
         return script_data, api_responses
 
     # Get keyframe timestamps from the sequence image filename
@@ -149,7 +147,7 @@ def generate_captions_and_narrations(
 
         max_words = max(1, int(duration * words_per_second))
         images_urls = []  # This will now contain only one URL, the sequence image URL
-        images_urls.append(sequence_image_url)
+        #images_urls.append(sequence_image_url)
 
         segments.append({
             "frame_numbers": frame_numbers,
@@ -174,7 +172,7 @@ def generate_captions_and_narrations(
             end_time = timestamps[-1]
             duration = end_time - start_time
             max_words = max(1, int(duration * words_per_second))
-            images_urls = [sequence_image_url]  # Only the sequence image URL
+            images_urls = []  # Only the sequence image URL
 
             segments.append({
                 "frame_numbers": frame_numbers,
@@ -208,18 +206,28 @@ def generate_captions_and_narrations(
             "Now proceed with the segmented narration:\n"
         )
 
+        # Encode the sequence image to base64
+        try:
+           buffered = BytesIO()
+           sequence_image.save(buffered, format="JPEG")
+           img_str = base64.b64encode(buffered.getvalue()).decode("utf-8")
+
+        except Exception as e:
+            logging.error(f"Error encoding sequence image to base64: {e}")
+            return script_data, api_responses
+
         # Build messages for the GPT model
         messages_content = [
             {
                 "type": "text",
                 "text": combined_prompt.format(max_words_total=max_words_total)
             },
-            {  # Add the image URL here, outside the loop
+            {  # Add the image as base64
                 "type": "image_url",
-                "image_url": {
-                    "url": sequence_image_url,
-                    "detail": "high",
-                }
+                 "image_url": {
+                    "url": f"data:image/jpeg;base64,{img_str}",
+                     "detail": "high",
+                    }
             }
         ]
 
@@ -231,8 +239,6 @@ def generate_captions_and_narrations(
                 f"Duration: {seg['duration']:.2f} seconds\n"
                 f"Max Words Allowed: {seg['max_words']}\n"
             )
-
-            # Add the sequence image URL for each segment
 
             messages_content.append({
                 "type": "text",
@@ -266,8 +272,6 @@ def generate_captions_and_narrations(
 
         if not narration_response:
             logging.error("Unable to generate narration after retries.")
-            if blob_name:
-               delete_from_gcs(blob_name) #Delete if processing fails
             return script_data, api_responses
 
         # Parse the model’s response
@@ -428,11 +432,7 @@ def generate_captions_and_narrations(
 
     else:
         logging.error(f"Unsupported model choice: {model_choice}")
-        if blob_name:
-            delete_from_gcs(blob_name) #Delete if processing fails
         return script_data, api_responses
-    if blob_name:
-        delete_from_gcs(blob_name)
 
     logging.info("Finished generating captions and narrations.")
     return script_data, api_responses
