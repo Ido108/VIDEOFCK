@@ -1,18 +1,18 @@
 @echo off
 echo Setting up the environment for the video processing app...
 
-:: Step 1: Check if Python 3 is installed
-echo Checking for Python 3...
-where python3 >nul 2>&1
+:: Step 1: Check if Python is installed
+echo Checking for Python...
+where python >nul 2>&1
 if %errorlevel% neq 0 (
-    echo Error: Python 3 is not installed. Please install it before running this script.
+    echo Error: Python is not installed. Please install it before running this script.
     pause
     exit /b 1
 )
 
 :: Step 2: Check if pip is installed
 echo Checking for pip...
-where pip3 >nul 2>&1
+where pip >nul 2>&1
 if %errorlevel% neq 0 (
     echo Error: pip is not installed. Please install it before running this script.
     pause
@@ -21,7 +21,7 @@ if %errorlevel% neq 0 (
 
 :: Step 3: Install Python dependencies
 echo Installing required Python packages...
-python3 -m pip install -r requirements.txt
+python -m pip install -r requirements.txt
 if %errorlevel% neq 0 (
     echo Error: Failed to install Python packages. Please check the requirements.txt file and try again.
     pause
@@ -134,7 +134,7 @@ echo Creating start.bat file with icon and application launch...
 (
 echo @echo off
 echo cd %~dp0
-echo start "" "python3" app.py
+echo start "" "python" app.py
 ) > start.bat
 
 :: Add a registry tweak to add icon to batch file start.bat

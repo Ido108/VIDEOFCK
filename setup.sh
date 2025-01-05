@@ -7,23 +7,23 @@ command_exists() {
 
 echo "Setting up the environment for the video processing app..."
 
-# Step 1: Check if Python 3 is installed
-echo "Checking for Python 3..."
-if ! command_exists python3; then
-  echo "Error: Python 3 is not installed. Please install it before running this script."
+# Step 1: Check if Python is installed
+echo "Checking for Python..."
+if ! command_exists python; then
+  echo "Error: Python is not installed. Please install it before running this script."
   exit 1
 fi
 
 # Step 2: Check if pip is installed
 echo "Checking for pip..."
-if ! command_exists pip3; then
+if ! command_exists pip; then
   echo "Error: pip is not installed. Please install it before running this script."
   exit 1
 fi
 
 # Step 3: Install Python dependencies
 echo "Installing required Python packages..."
-python3 -m pip install -r requirements.txt
+python -m pip install -r requirements.txt
 if [ $? -ne 0 ]; then
   echo "Error: Failed to install Python packages. Please check the requirements.txt file and try again."
   exit 1
@@ -130,7 +130,7 @@ echo "Creating start.sh script with application launch..."
 cat > start.sh << EOF
 #!/bin/bash
 cd "\$(dirname "\$0")"
-python3 app.py
+python app.py
 EOF
 chmod +x start.sh
 echo "start.sh file created. You can now start the app using ./start.sh"
