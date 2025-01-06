@@ -325,7 +325,7 @@ if __name__ == "__main__":
 
                         gr.Markdown("## Advanced Settings")
                         with gr.Column():
-                            burn_subtitles_input = gr.Checkbox(label="Burn Subtitles?", value=False)
+                            burn_subtitles_input = gr.Checkbox(label="Burn Subtitles?", value=False, visible=False)
                             original_audio_volume_input = gr.Slider(
                                 label="Original Audio Volume",
                                 minimum=0.0,
