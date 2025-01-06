@@ -78,32 +78,6 @@ if not "%gemini_api_key%"=="" (
     echo GEMINI_API_KEY=%gemini_api_key% >> .env
 )
 
-
-:: LANGCHAIN_TRACING_V2
-set /p langchain_tracing_v2="Enable Langchain Tracing V2 (true/false): "
-if not "%langchain_tracing_v2%"=="" (
-  echo LANGCHAIN_TRACING_V2=%langchain_tracing_v2% >> .env
-)
-
-
-:: LANGCHAIN_ENDPOINT
-set /p langchain_endpoint="Enter your Langchain endpoint: "
-if not "%langchain_endpoint%"=="" (
-   echo LANGCHAIN_ENDPOINT="%langchain_endpoint%" >> .env
-)
-
-:: LANGCHAIN_API_KEY
-set /p langchain_api_key="Enter your Langchain API key: "
-if not "%langchain_api_key%"=="" (
-    echo LANGCHAIN_API_KEY="%langchain_api_key%" >> .env
-)
-
-:: LANGCHAIN_PROJECT
-set /p langchain_project="Enter your Langchain project name: "
-if not "%langchain_project%"=="" (
-   echo LANGCHAIN_PROJECT="%langchain_project%" >> .env
-)
-
 :: GOOGLE_APPLICATION_CREDENTIALS (Optional, only prompted if gcloud SDK is installed)
 where gcloud >nul 2>&1
 if %errorlevel% equ 0 (
@@ -153,7 +127,7 @@ echo Creating start.bat file with icon and application launch...
 echo @echo off
 echo cd %~dp0
 echo call venv\Scripts\activate
-echo start "" "python" app.py
+echo python app.py
 ) > start.bat
 
 :: Add a registry tweak to add icon to batch file start.bat
