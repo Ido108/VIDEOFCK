@@ -67,4 +67,4 @@ Before using VideoFck (by LordHaziza), ensure you have the following:
 7.  **Process Video:** Click the "Process Video" button to begin generating the output video.
 8.  **View the results:** When the app finishes, it will present you the processed video in the player, and it will show the path for where the json files and the video where saved, for your convenience.
 
-## File Structure
+## Enjoy mf
