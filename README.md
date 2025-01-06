@@ -52,7 +52,7 @@ Before using VideoFck (by LordHaziza), ensure you have the following:
     *   OpenAI API Key (if using GPT model).
     *   Claude API Key (if using Claude model).
     *   Gemini API Key.
-## Note: For using Google TTS You need to set your sevrice account details and google api in the env file. More details here: https://cloud.google.com/text-to-speech/docs/authentication
+## Note: For using Google TTS You need to set your service account details and google api in the env file. More details here: https://cloud.google.com/text-to-speech/docs/authentication
 *   **Google Cloud SDK (Optional):** For Google Cloud TTS and you must install the Google Cloud SDK: [https://cloud.google.com/sdk/docs/install](https://cloud.google.com/sdk/docs/install), and have a [Google Service Account Key](https://cloud.google.com/iam/docs/keys-create-delete) which its path must be inserted when prompted (Optional). You can Always add it in ".env" file.
 *   **ffmpeg**: make sure that ffmpeg is installed and accessible by the system.
 
