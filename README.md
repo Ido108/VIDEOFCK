@@ -69,7 +69,6 @@ Before using VideoFck (by LordHaziza), ensure you have the following:
     *   Choose between the **Claude** or **GPT** model for captions and narrations.
     *   Adjust playback speed and add style instructions.
 4.  **Text-to-Speech (TTS):** Select a TTS Engine (Google Cloud TTS or ElevenLabs), a voice, and model if using ElevenLabs.
-5.  **Burn Subtitles:** Check the 'Burn Subtitles' box if you wish to add burned subtitles to the output video.
 6.  **Original Audio Volume**: Change the original audio volume if needed, this is useful if you wish to keep the original audio with a low volume along with the generated narrations.
 7.  **Process Video:** Click the "Process Video" button to begin generating the output video.
 8.  **View the results:** When the app finishes, it will present you the processed video in the player, and it will show the path for where the json files and the video where saved, for your convenience.
