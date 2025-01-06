@@ -1,3 +1,6 @@
+# <img src="logo.png" alt="VideoFck Logo" width="200"/> 
+
+
 # VideoFck (by LordHaziza): AI-Powered Video Narration App
 
 **VideoFck (by LordHaziza)** is a Streamlit application that automatically generates narrations for your videos using AI. It extracts keyframes, creates captions, synthesizes speech, and merges the audio back into the video, with the option to add burned-in subtitles. This tool supports multiple AI models for captioning and narration, and offers flexibility in text-to-speech engines and voice selection.
