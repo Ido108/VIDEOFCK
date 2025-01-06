@@ -204,101 +204,8 @@ def extract_key_frames(video_path, project_folder, keyframe_threshold=20, num_ke
 
     cap.release()
 
-    # Create combined keyframe sequence image
-    create_sequence_image(project_folder, keyframes_per_segment=keyframes_per_segment)
-
     logging.info("Finished key frame extraction")
     return key_frames, keyframe_timestamps
-
-def create_sequence_image(project_folder, keyframes_per_segment):
-    """
-    Combines keyframes from a project into a single image with timestamps and frame numbers.
-
-    Args:
-        project_folder: Path to the project folder (e.g., "output/project_20250103_221206").
-        keyframes_per_segment: The number of keyframes per segment and per row in the combined image.
-    """
-    keyframes_per_row = keyframes_per_segment
-    keyframes_folder = os.path.join(project_folder, "keyframes")
-    keyframe_files = sorted([f for f in os.listdir(keyframes_folder) if f.endswith('.jpg')],
-                            key=lambda x: extract_timestamp(x) or 0.0)
-
-    if not keyframe_files:
-        print(f"No keyframe files found in: {keyframes_folder}")
-        return
-
-    # 1. Load the first keyframe to get dimensions and calculate target size
-    first_keyframe = Image.open(os.path.join(keyframes_folder, keyframe_files[0]))
-    original_keyframe_width, original_keyframe_height = first_keyframe.size
-    first_keyframe.close()
-
-    # Calculate the target width and height for each keyframe (adjust as needed)
-    target_keyframe_width = 900
-    target_keyframe_height = int(original_keyframe_height * (target_keyframe_width / original_keyframe_width))
-
-    # 2. Determine Layout and Canvas Size
-    num_rows = (len(keyframe_files) + keyframes_per_row - 1) // keyframes_per_row
-    canvas_width = target_keyframe_width * keyframes_per_row
-    canvas_height = target_keyframe_height * num_rows
-
-    # 3. Create Canvas
-    canvas = Image.new("RGB", (canvas_width, canvas_height), "black")
-    draw = ImageDraw.Draw(canvas)
-
-    # Choose a font
-    try:
-        font = ImageFont.truetype("arial.ttf", 25)
-    except IOError:
-        print("Arial font not found, using default font.")
-        font = ImageFont.load_default()
-
-    # 4. & 5. Paste Keyframes, Add Timestamps and Frame Numbers
-    for i, keyframe_file in enumerate(keyframe_files):
-        keyframe_path = os.path.join(keyframes_folder, keyframe_file)
-        keyframe = Image.open(keyframe_path)
-
-        # Resize the keyframe
-        keyframe = keyframe.resize((target_keyframe_width, target_keyframe_height), Image.LANCZOS)
-
-        row = i // keyframes_per_row
-        col = i % keyframes_per_row
-        x = col * target_keyframe_width
-        y = row * target_keyframe_height
-
-        canvas.paste(keyframe, (x, y))
-
-        # Extract timestamp
-        timestamp = extract_timestamp(keyframe_file)
-        if timestamp is not None:
-            timestamp_text = f"{timestamp:.2f}"
-
-            # Calculate text position for timestamp
-            text_x = x + 5
-            text_y = y + 5
-
-            # Add a background for the text
-            text_bbox = draw.textbbox((text_x, text_y), timestamp_text, font=font)
-            draw.rectangle(text_bbox, fill="black")
-            draw.text((text_x, text_y), timestamp_text, font=font, fill="white")
-
-        # Add frame number
-        frame_number_text = f"Keyframe - {i}"
-
-        # Calculate text position for frame number
-        frame_number_x = x + 5
-        frame_number_y = y + 5 + 50
-
-        # Add a background for the text
-        frame_number_bbox = draw.textbbox((frame_number_x, frame_number_y), frame_number_text, font=font)
-        draw.rectangle(frame_number_bbox, fill="black")
-        draw.text((frame_number_x, frame_number_y), frame_number_text, font=font, fill="yellow")
-
-        keyframe.close()
-
-    # 6. Save the Combined Image
-    output_image_path = os.path.join(project_folder, "keyframes_sequence.jpg")
-    canvas.save(output_image_path, quality=85)
-    print(f"Combined keyframe image saved to: {output_image_path}")
 
 def create_sequence_image_for_segment(segment, keyframes_folder, output_folder, keyframes_per_segment):
     """
@@ -310,7 +217,7 @@ def create_sequence_image_for_segment(segment, keyframes_folder, output_folder, 
         output_folder (str): Path to the folder where the sequence image will be saved.
         keyframes_per_segment (int): Number of keyframes per row in the sequence image.
     """
-    keyframes_per_row = keyframes_per_segment
+    border_size = 2
 
     frame_numbers = segment["frame_numbers"]
     keyframe_files = [f for f in os.listdir(keyframes_folder) if f.endswith('.jpg') and int(f.split('_')[1]) in frame_numbers]
@@ -318,7 +225,7 @@ def create_sequence_image_for_segment(segment, keyframes_folder, output_folder, 
 
     if not keyframe_files:
         logging.warning(f"No keyframe files found for segment: {segment['frame_numbers']}")
-        return
+        return None
 
     # Load the first keyframe to get dimensions
     first_keyframe = Image.open(os.path.join(keyframes_folder, keyframe_files[0]))
@@ -326,13 +233,15 @@ def create_sequence_image_for_segment(segment, keyframes_folder, output_folder, 
     first_keyframe.close()
 
     # Calculate target size for keyframes in the sequence image
-    target_keyframe_width = 427
+    target_keyframe_width = 1200
     target_keyframe_height = int(original_keyframe_height * (target_keyframe_width / original_keyframe_width))
 
     # Determine layout and canvas size
-    num_rows = (len(keyframe_files) + keyframes_per_row - 1) // keyframes_per_row
-    canvas_width = target_keyframe_width * keyframes_per_row
-    canvas_height = target_keyframe_height * num_rows
+    # The number of rows will be 1 since we want all keyframes in a segment to be in a single row
+    num_rows = 1
+    keyframes_per_row = len(keyframe_files)
+    canvas_width = (target_keyframe_width + border_size * 2) * keyframes_per_row
+    canvas_height = target_keyframe_height + border_size * 2
 
     # Create canvas
     canvas = Image.new("RGB", (canvas_width, canvas_height), "black")
@@ -340,7 +249,7 @@ def create_sequence_image_for_segment(segment, keyframes_folder, output_folder, 
 
     # Load font
     try:
-        font = ImageFont.truetype("arial.ttf", 25)
+        font = ImageFont.truetype("arial.ttf", 35)
     except IOError:
         font = ImageFont.load_default()
 
@@ -352,155 +261,55 @@ def create_sequence_image_for_segment(segment, keyframes_folder, output_folder, 
         # Resize keyframe
         keyframe = keyframe.resize((target_keyframe_width, target_keyframe_height), Image.LANCZOS)
 
-        row = i // keyframes_per_row
-        col = i % keyframes_per_row
-        x = col * target_keyframe_width
-        y = row * target_keyframe_height
+        # Since we want all keyframes in one row, we only calculate x based on index
+        x = i * (target_keyframe_width + border_size * 2) + border_size
+        y = border_size
 
+        # Add a white border around the keyframe
+        draw.rectangle([x - border_size, y - border_size, x + target_keyframe_width + border_size - 1, y + target_keyframe_height + border_size - 1], outline="white", width=border_size)
+
+        # Paste the keyframe onto the canvas
         canvas.paste(keyframe, (x, y))
 
         # Add timestamp
         timestamp = extract_timestamp(keyframe_file)
         if timestamp is not None:
             timestamp_text = f"{timestamp:.2f}"
-            text_x = x + 5
-            text_y = y + 5
-            text_bbox = draw.textbbox((text_x, text_y), timestamp_text, font=font)
-            draw.rectangle(text_bbox, fill="black")
+
+            # Calculate text size for centering
+            text_bbox = draw.textbbox((x, y), timestamp_text, font=font)
+            text_width = text_bbox[2] - text_bbox[0]
+            text_height = text_bbox[3] - text_bbox[1]
+
+            # Calculate text position for bottom center
+            text_x = x + (target_keyframe_width - text_width) // 2
+            text_y = y + target_keyframe_height - text_height - 15  # 15 pixels from the bottom
+
+            # Add a semi-transparent background for the text
+            draw.rectangle((text_x - 2, text_y - 2, text_x + text_width + 2, text_y + text_height + 2), fill=(0, 0, 0, 180))
             draw.text((text_x, text_y), timestamp_text, font=font, fill="white")
 
         # Add frame number
         frame_number_text = f"F. {frame_numbers[i]}"
-        frame_number_x = x + 5
-        frame_number_y = y + 5 + 30
-        frame_number_bbox = draw.textbbox((frame_number_x, frame_number_y), frame_number_text, font=font)
-        draw.rectangle(frame_number_bbox, fill="black")
+
+        # Calculate text size for centering
+        text_bbox = draw.textbbox((x, y), frame_number_text, font=font)
+        text_width = text_bbox[2] - text_bbox[0]
+        text_height = text_bbox[3] - text_bbox[1]
+
+        # Calculate text position for bottom center
+        frame_number_x = x + (target_keyframe_width - text_width) // 2
+        frame_number_y = text_y - text_height - 10  # 10 pixels above the timestamp
+
+        # Add a semi-transparent background for the text
+        draw.rectangle((frame_number_x - 2, frame_number_y - 2, frame_number_x + text_width + 2, frame_number_y + text_height + 2), fill=(0, 0, 0, 180))
         draw.text((frame_number_x, frame_number_y), frame_number_text, font=font, fill="yellow")
 
         keyframe.close()
 
     # Save the sequence image for the segment
     output_image_path = os.path.join(output_folder, f"segment_frames_{frame_numbers[0]}-{frame_numbers[-1]}.jpg")
-    canvas.save(output_image_path, quality=85)
-    logging.info(f"Sequence image for segment {frame_numbers} saved to: {output_image_path}")
-    return output_image_path
-
-def extract_keyframes_by_number(cap, num_keyframes, keyframes_folder):
-    """Extracts a fixed number of keyframes, evenly spaced, including the last frame."""
-    key_frames = []
-    keyframe_timestamps = []
-    total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-    fps = cap.get(cv2.CAP_PROP_FPS)
-
-    frame_interval = max(1, total_frames // num_keyframes)
-    for i in range(num_keyframes):
-        frame_index = i * frame_interval
-        if frame_index >= total_frames:
-            break
-        cap.set(cv2.CAP_PROP_POS_FRAMES, frame_index)
-        ret, frame = cap.read()
-        if ret:
-            timestamp = frame_index / fps
-            keyframe_filename = os.path.join(keyframes_folder, f"keyframe_{i}_{timestamp:.2f}.jpg")
-            cv2.imwrite(keyframe_filename, frame)
-            key_frames.append(frame)
-            keyframe_timestamps.append(timestamp)
-            logging.info(f"Saving key frame {i} at {timestamp:.2f}s")
-
-    # Also ensure the last frame is included
-    last_frame_index = total_frames - 1
-    if not keyframe_timestamps or (last_frame_index / fps) > keyframe_timestamps[-1]:
-        cap.set(cv2.CAP_PROP_POS_FRAMES, last_frame_index)
-        ret, frame = cap.read()
-        if ret:
-            timestamp = last_frame_index / fps
-            keyframe_filename = os.path.join(keyframes_folder, f"keyframe_{i+1}_{timestamp:.2f}.jpg")
-            cv2.imwrite(keyframe_filename, frame)
-            key_frames.append(frame)
-            keyframe_timestamps.append(timestamp)
-            logging.info(f"Saving last key frame at {timestamp:.2f}s")
-
-    return key_frames, keyframe_timestamps
-def create_sequence_image_for_segment(segment, keyframes_folder, output_folder, keyframes_per_row=3):
-    """
-    Creates a sequence image for a single segment.
-
-    Args:
-        segment (dict): The segment data containing frame numbers, timestamps, etc.
-        keyframes_folder (str): Path to the folder containing individual keyframe images.
-        output_folder (str): Path to the folder where the sequence image will be saved.
-        keyframes_per_row (int): Number of keyframes per row in the sequence image.
-    """
-    frame_numbers = segment["frame_numbers"]
-    keyframe_files = [f for f in os.listdir(keyframes_folder) if f.endswith('.jpg') and int(f.split('_')[1]) in frame_numbers]
-    keyframe_files.sort(key=lambda x: extract_timestamp(x) or 0.0)  # Sort by timestamp
-
-    if not keyframe_files:
-        logging.warning(f"No keyframe files found for segment: {segment['frame_numbers']}")
-        return
-
-    # Load the first keyframe to get dimensions
-    first_keyframe = Image.open(os.path.join(keyframes_folder, keyframe_files[0]))
-    original_keyframe_width, original_keyframe_height = first_keyframe.size
-    first_keyframe.close()
-
-    # Calculate target size for keyframes in the sequence image
-    target_keyframe_width = 427  # Adjust as needed
-    target_keyframe_height = int(original_keyframe_height * (target_keyframe_width / original_keyframe_width))
-
-    # Determine layout and canvas size
-    num_rows = (len(keyframe_files) + keyframes_per_row - 1) // keyframes_per_row
-    canvas_width = target_keyframe_width * keyframes_per_row
-    canvas_height = target_keyframe_height * num_rows
-
-    # Create canvas
-    canvas = Image.new("RGB", (canvas_width, canvas_height), "black")
-    draw = ImageDraw.Draw(canvas)
-
-    # Load font
-    try:
-        font = ImageFont.truetype("arial.ttf", 25)
-    except IOError:
-        font = ImageFont.load_default()
-
-    # Paste keyframes and add timestamps/frame numbers
-    for i, keyframe_file in enumerate(keyframe_files):
-        keyframe_path = os.path.join(keyframes_folder, keyframe_file)
-        keyframe = Image.open(keyframe_path)
-
-        # Resize keyframe
-        keyframe = keyframe.resize((target_keyframe_width, target_keyframe_height), Image.LANCZOS)
-
-        row = i // keyframes_per_row
-        col = i % keyframes_per_row
-        x = col * target_keyframe_width
-        y = row * target_keyframe_height
-
-        canvas.paste(keyframe, (x, y))
-
-        # Add timestamp
-        timestamp = extract_timestamp(keyframe_file)
-        if timestamp is not None:
-            timestamp_text = f"{timestamp:.2f}"
-            text_x = x + 5
-            text_y = y + 5
-            text_bbox = draw.textbbox((text_x, text_y), timestamp_text, font=font)
-            draw.rectangle(text_bbox, fill="black")
-            draw.text((text_x, text_y), timestamp_text, font=font, fill="white")
-
-        # Add frame number
-        frame_number_text = f"F. {frame_numbers[i]}"
-        frame_number_x = x + 5
-        frame_number_y = y + 5 + 30  # Below the timestamp
-        frame_number_bbox = draw.textbbox((frame_number_x, frame_number_y), frame_number_text, font=font)
-        draw.rectangle(frame_number_bbox, fill="black")
-        draw.text((frame_number_x, frame_number_y), frame_number_text, font=font, fill="yellow")
-
-        keyframe.close()
-
-    # Save the sequence image for the segment
-    output_image_path = os.path.join(output_folder, f"segment_frames_{frame_numbers[0]}-{frame_numbers[-1]}.jpg")
-    canvas.save(output_image_path, quality=85)
+    canvas.save(output_image_path, quality=100)
     logging.info(f"Sequence image for segment {frame_numbers} saved to: {output_image_path}")
     return output_image_path
 
