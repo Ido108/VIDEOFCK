@@ -10,4 +10,5 @@ google-cloud-texttospeech
 google-cloud-storage
 pydub
 elevenlabs
-langchain
+opencv-python
+gradio
