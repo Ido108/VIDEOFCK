@@ -1,6 +1,6 @@
-# VideoMaster: AI-Powered Video Narration App
+# VideoFck (by LordHaziza): AI-Powered Video Narration App
 
-**VideoMaster** is a Streamlit application that automatically generates narrations for your videos using AI. It extracts keyframes, creates captions, synthesizes speech, and merges the audio back into the video, with the option to add burned-in subtitles. This tool supports multiple AI models for captioning and narration, and offers flexibility in text-to-speech engines and voice selection.
+**VideoFck (by LordHaziza)** is a Streamlit application that automatically generates narrations for your videos using AI. It extracts keyframes, creates captions, synthesizes speech, and merges the audio back into the video, with the option to add burned-in subtitles. This tool supports multiple AI models for captioning and narration, and offers flexibility in text-to-speech engines and voice selection.
 
 ## Features
 
@@ -14,7 +14,7 @@
 
 ## Prerequisites
 
-Before using VideoMaster, ensure you have the following:
+Before using VideoFck (by LordHaziza), ensure you have the following:
 
 *   **Python 3.6+** installed on your system.
 *   **`pip`** (Python's package installer).
@@ -29,7 +29,7 @@ Before using VideoMaster, ensure you have the following:
 
 ## Setup Instructions
 
-Follow these steps to set up VideoMaster on your local machine:
+Follow these steps to set up VideoFck (by LordHaziza) on your local machine:
 
 1.  **Clone the Repository:**
     ```bash
