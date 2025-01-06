@@ -29,6 +29,7 @@ Follow these steps to set up VideoFck (by LordHaziza) on your local machine:
     *   **Windows:** Double-click `start.bat`
     *   **macOS/Linux:** Run `./start.sh`
 
+## Note: For using Google TTS You need to set your sevice account and google api. More details here: https://cloud.google.com/text-to-speech/docs/authentication
 
 **VideoFck (by LordHaziza)** is a Streamlit application that automatically generates narrations for your videos using AI. It extracts keyframes, creates captions, synthesizes speech, and merges the audio back into the video, with the option to add burned-in subtitles. This tool supports multiple AI models for captioning and narration, and offers flexibility in text-to-speech engines and voice selection.
 
@@ -54,7 +55,7 @@ Before using VideoFck (by LordHaziza), ensure you have the following:
     *   Claude API Key (if using Claude model).
     *   Gemini API Key.
     *  Langchain API key (optional - for tracing).
-*   **Google Cloud SDK (Optional):** For Google Cloud TTS and Google Cloud Storage (GCS) you must install the Google Cloud SDK: [https://cloud.google.com/sdk/docs/install](https://cloud.google.com/sdk/docs/install), and have a [Google Service Account Key](https://cloud.google.com/iam/docs/keys-create-delete) which its path must be inserted when prompted (Optional).
+*   **Google Cloud SDK (Optional):** For Google Cloud TTS and you must install the Google Cloud SDK: [https://cloud.google.com/sdk/docs/install](https://cloud.google.com/sdk/docs/install), and have a [Google Service Account Key](https://cloud.google.com/iam/docs/keys-create-delete) which its path must be inserted when prompted (Optional). You can Always add it in ".env" file.
 *   **ffmpeg**: make sure that ffmpeg is installed and accessible by the system.
 
 
