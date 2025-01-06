@@ -12,21 +12,6 @@
 *   **Flexible Model Choice:** Supports multiple AI models such as Claude and GPT for captioning and narration.
 *  **Cross-Platform Setup:** Provides setup scripts for both Windows and macOS/Linux.
 
-## Prerequisites
-
-Before using VideoFck (by LordHaziza), ensure you have the following:
-
-*   **Python 3.6+** installed on your system.
-*   **`pip`** (Python's package installer).
-*   **API Keys:**
-    *   ElevenLabs API Key (if using ElevenLabs TTS).
-    *   OpenAI API Key (if using GPT model).
-    *   Claude API Key (if using Claude model).
-    *   Gemini API Key.
-    *  Langchain API key (optional - for tracing).
-*   **Google Cloud SDK (Optional):** For Google Cloud TTS and Google Cloud Storage (GCS) you must install the Google Cloud SDK: [https://cloud.google.com/sdk/docs/install](https://cloud.google.com/sdk/docs/install), and have a [Google Service Account Key](https://cloud.google.com/iam/docs/keys-create-delete) which its path must be inserted when prompted (Optional).
-*   **ffmpeg**: make sure that ffmpeg is installed and accessible by the system.
-
 ## Setup Instructions
 
 Follow these steps to set up VideoFck (by LordHaziza) on your local machine:
@@ -52,6 +37,23 @@ Follow these steps to set up VideoFck (by LordHaziza) on your local machine:
 3.  **Run the application:**
     *   **Windows:** Double-click `start.bat`
     *   **macOS/Linux:** Run `./start.sh`
+
+## Prerequisites
+
+Before using VideoFck (by LordHaziza), ensure you have the following:
+
+*   **Python 3.6+** installed on your system.
+*   **`pip`** (Python's package installer).
+*   **API Keys:**
+    *   ElevenLabs API Key (if using ElevenLabs TTS).
+    *   OpenAI API Key (if using GPT model).
+    *   Claude API Key (if using Claude model).
+    *   Gemini API Key.
+    *  Langchain API key (optional - for tracing).
+*   **Google Cloud SDK (Optional):** For Google Cloud TTS and Google Cloud Storage (GCS) you must install the Google Cloud SDK: [https://cloud.google.com/sdk/docs/install](https://cloud.google.com/sdk/docs/install), and have a [Google Service Account Key](https://cloud.google.com/iam/docs/keys-create-delete) which its path must be inserted when prompted (Optional).
+*   **ffmpeg**: make sure that ffmpeg is installed and accessible by the system.
+
+
 
 ## Using the Application
 
