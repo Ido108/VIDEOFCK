@@ -17,13 +17,7 @@ Follow these steps to set up VideoFck (by LordHaziza) on your local machine:
     *   **Windows:** Double-click the `setup.bat` file.
     *   **macOS/Linux:** Run `./setup.sh` in your terminal.
 
-    The setup script will:
-        * Create a virtual environment (`venv`)
-        * Install required Python dependencies.
-        * Prompt you for API keys and Google Application Credentials.
-        * Create a `.env` file with the provided keys.
-        * Create a `config.py` file with placeholders to read API keys from the .env file.
-        * Create a `start.bat` (Windows) or `start.sh` (macOS/Linux) script to launch the app.
+    Follow the installation steps and the add your api keys during the setup. (links to API keys for each platform provided during setup)
 
 3.  **Run the application:**
     *   **Windows:** Double-click `start.bat`
