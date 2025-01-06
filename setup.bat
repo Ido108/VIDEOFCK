@@ -57,30 +57,30 @@ type nul > .env
 echo Please enter your API keys and configurations. You can leave empty if you wish to manually configure later.
 
 :: ELEVENLABS_API_KEY
-set /p elevenlabs_api_key="Enter your ElevenLabs API key: "
+set /p elevenlabs_api_key="Enter your ElevenLabs API key (Link to retrieve: https://elevenlabs.io/app/settings/api-keys ): "
 if not "%elevenlabs_api_key%"=="" (
     echo ELEVENLABS_API_KEY=%elevenlabs_api_key% >> .env
 )
 
 :: OPENAI_API_KEY
-set /p openai_api_key="Enter your OpenAI API key: "
+set /p openai_api_key="Enter your OpenAI API key ( Link to retrieve: https://platform.openai.com/api-keys ): "
 if not "%openai_api_key%"=="" (
     echo OPENAI_API_KEY=%openai_api_key% >> .env
 )
 
 :: CLAUDE_API_KEY
-set /p claude_api_key="Enter your Claude API key: "
+set /p claude_api_key="Enter your Claude API key: (Link to retrieve: https://console.anthropic.com/settings/keys )"
 if not "%claude_api_key%"=="" (
    echo CLAUDE_API_KEY=%claude_api_key% >> .env
 )
 
 :: GEMINI_API_KEY
-set /p gemini_api_key="Enter your Gemini API key: "
+set /p gemini_api_key="Enter your Gemini API key ( Link to retrieve: https://aistudio.google.com/app/apikey ): "
 if not "%gemini_api_key%"=="" (
     echo GEMINI_API_KEY=%gemini_api_key% >> .env
 )
 
-:: GOOGLE_APPLICATION_CREDENTIALS (Optional, only prompted if gcloud SDK is installed)
+:: GOOGLE_APPLICATION_CREDENTIALS (path to json) (Optional for Google TTS. help: https://cloud.google.com/text-to-speech/docs/authentication )
 where gcloud >nul 2>&1
 if %errorlevel% equ 0 (
     set /p google_app_cred="Enter the full path to your Google Application Credentials JSON file (optional): "
