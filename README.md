@@ -17,7 +17,7 @@ Follow these steps to set up VideoFck (by LordHaziza) on your local machine:
     *   **Windows:** Double-click the `setup.bat` file.
     *   **macOS/Linux:** Run `./setup.sh` in your terminal.
 
-    Follow the installation steps and the add your api keys during the setup. (links to API keys for each platform provided during setup)
+    Follow the installation steps and add your api keys during the setup. (links to API keys for each platform provided during setup)
 
 3.  **Run the application:**
     *   **Windows:** Double-click `start.bat`
