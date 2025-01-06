@@ -7,10 +7,10 @@ command_exists() {
 
 echo "Setting up the environment for the video processing app..."
 
-# Step 1: Check if Python is installed
-echo "Checking for Python..."
+# Step 1: Check if python3 is installed
+echo "Checking for python3..."
 if ! command_exists python3; then
-  echo "Error: Python is not installed. Please install it before running this script."
+  echo "Error: python3 is not installed. Please install it before running this script."
   exit 1
 fi
 
@@ -37,53 +37,49 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-
-# Step 5: Install Python dependencies
-echo "Installing required Python packages..."
+# Step 5: Install python3 dependencies
+echo "Installing required python3 packages..."
 pip install -r requirements.txt
 if [ $? -ne 0 ]; then
-  echo "Error: Failed to install Python packages. Please check the requirements.txt file and try again."
+  echo "Error: Failed to install python3 packages. Please check the requirements.txt file and try again."
   exit 1
 fi
-echo "Python packages installed successfully."
+echo "python3 packages installed successfully."
 
 # Step 6: Create .env file
 echo "Creating .env file..."
-touch .env
+> .env  # Truncate the .env file if it exists or create a new one
 
 # Prompt for API keys and other configuration
 echo "Please enter your API keys and configurations. You can leave empty if you wish to manually configure later."
 
+# Function to prompt and write to .env
+prompt_and_write() {
+  local var_name=$1
+  local prompt_message=$2
+  local user_input
+
+  read -r -p "$prompt_message: " user_input
+  # Escape double quotes and backslashes in user input
+  user_input=$(printf '%s' "$user_input" | sed 's/\\/\\\\/g; s/"/\\"/g')
+  echo "${var_name}=\"${user_input}\"" >> .env
+}
+
 # ELEVENLABS_API_KEY
-read -r -p "Enter your ElevenLabs API key: " elevenlabs_api_key
-if [[ ! -z "$elevenlabs_api_key" ]]; then
-    echo "ELEVENLABS_API_KEY=$elevenlabs_api_key" >> .env
-fi
+prompt_and_write "ELEVENLABS_API_KEY" "Enter your ElevenLabs API key"
 
 # OPENAI_API_KEY
-read -r -p "Enter your OpenAI API key: " openai_api_key
-if [[ ! -z "$openai_api_key" ]]; then
-    echo "OPENAI_API_KEY=$openai_api_key" >> .env
-fi
+prompt_and_write "OPENAI_API_KEY" "Enter your OpenAI API key"
 
 # CLAUDE_API_KEY
-read -r -p "Enter your Claude API key: " claude_api_key
-if [[ ! -z "$claude_api_key" ]]; then
-   echo "CLAUDE_API_KEY=$claude_api_key" >> .env
-fi
+prompt_and_write "CLAUDE_API_KEY" "Enter your Claude API key"
 
 # GEMINI_API_KEY
-read -r -p "Enter your Gemini API key: " gemini_api_key
-if [[ ! -z "$gemini_api_key" ]]; then
-    echo "GEMINI_API_KEY=$gemini_api_key" >> .env
-fi
+prompt_and_write "GEMINI_API_KEY" "Enter your Gemini API key"
 
 # GOOGLE_APPLICATION_CREDENTIALS (Optional, only prompted if gcloud SDK is installed)
 if command_exists gcloud; then
-  read -r -p "Enter the full path to your Google Application Credentials JSON file (optional): " google_app_cred
-  if [[ ! -z "$google_app_cred" ]]; then
-    echo "GOOGLE_APPLICATION_CREDENTIALS=\"$google_app_cred\"" >> .env
-  fi
+  prompt_and_write "GOOGLE_APPLICATION_CREDENTIALS" "Enter the full path to your Google Application Credentials JSON file (optional)"
 fi
 
 echo "Created .env file and added keys."
@@ -113,6 +109,10 @@ def verify_api_keys():
         keys_present = False
     if not ELEVENLABS_API_KEY:
         print("Warning: ELEVENLABS_API_KEY not found. ElevenLabs TTS will not be available.")
+    if not OPENAI_API_KEY:
+        print("Warning: OPENAI_API_KEY not found. OpenAI services will not be available.")
+    if not CLAUDE_API_KEY:
+        print("Warning: CLAUDE_API_KEY not found. Claude services will not be available.")
     return keys_present
 EOF
 echo "config.py file created and populated"
@@ -127,6 +127,5 @@ python3 app.py
 EOF
 chmod +x start.sh
 echo "start.sh file created. You can now start the app using ./start.sh"
-
 
 echo "Setup complete. You can now run the app with './start.sh'."
