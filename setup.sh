@@ -9,7 +9,7 @@ echo "Setting up the environment for the video processing app..."
 
 # Step 1: Check if Python is installed
 echo "Checking for Python..."
-if ! command_exists python; then
+if ! command_exists python3; then
   echo "Error: Python is not installed. Please install it before running this script."
   exit 1
 fi
@@ -23,7 +23,7 @@ fi
 
 # Step 3: Create virtual environment
 echo "Creating virtual environment..."
-python -m venv venv
+python3 -m venv venv
 if [ $? -ne 0 ]; then
   echo "Error: Failed to create virtual environment."
   exit 1
@@ -123,7 +123,7 @@ cat > start.sh << EOF
 #!/bin/bash
 cd "\$(dirname "\$0")"
 source venv/bin/activate
-python app.py
+python3 app.py
 EOF
 chmod +x start.sh
 echo "start.sh file created. You can now start the app using ./start.sh"
