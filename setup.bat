@@ -134,7 +134,15 @@ echo start "" python app.py
 
 
 echo Setup complete. A start.bat file with the start command is created.
-echo You can now run the app with start.bat.
+echo
+echo
+echo
+echo ===================================================================
+echo ===================================================================
+echo INSTALL FINISHED YOU LAZY A** B***! Provided by Haziza, the one and only.
+echo ===================================================================
+echo
+echo *** You can now run the app with start.bat ***
 
 pause
 exit /b 0
