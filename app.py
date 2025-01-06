@@ -270,65 +270,94 @@ if __name__ == "__main__":
     with gr.Blocks(theme=gr.themes.Soft(), css=".gradio-container {background-color: #f0f2f5;}") as demo:
         # State to store whether processing has started
         processing_state = gr.State("idle")
+        
         # Add logo
         if os.path.exists(LOGO_PATH):
-            logo = gr.Image(LOGO_PATH,  show_label=False, container=False, width = 200)
+            logo = gr.Image(LOGO_PATH, show_label=False, container=False, width=200)
         else:
             logo = gr.Markdown("## VideoMaster")
 
         with gr.Row():
             with gr.Column(scale=3):  # Input elements column (wider)
                 with gr.Column():
-                     with gr.Row():
-                        gr.Markdown(f'<p style="font-size: 15px; color: black">Upload a video to get started</p>')
-                     with gr.Row():
-                        uploaded_video_preview = gr.Video(label="Uploaded Video", width=150, height=100) # small preview
-                     with gr.Row():
+                    with gr.Row():
+                        gr.Markdown('<p style="font-size: 15px; color: black">Upload a video to get started</p>')
+                    with gr.Row():
+                        uploaded_video_preview = gr.Video(label="Uploaded Video", width=150, height=100)  # small preview
+                    with gr.Row():
                         video_input = gr.File(file_count='single', file_types=["video"], label="Upload/Drag a Video")
-
 
                 with gr.Row():
                     with gr.Column(scale=1):
-                            with gr.Column():
-                                gr.Markdown("## Keyframe Extraction Settings", label="Keyframe Extraction Settings")
-                                with gr.Row():
-                                    keyframe_extraction_method_input = gr.Radio(label="Keyframe Extraction Method", choices=["Threshold", "Number"], value="Number")
-                                with gr.Row():
-                                    keyframe_threshold_input = gr.Slider(label="Keyframe Change Threshold", minimum=1, maximum=100, step=1, value=30, visible=False)
-                                    num_keyframes_input = gr.Slider(label="Number of Keyframes", minimum=2, maximum=50, step=1, value=20, visible=True)
-                                with gr.Row():
-                                    keyframes_per_segment_input = gr.Slider(
-                                        label="Keyframes per Segment",
-                                        minimum=1,
-                                        maximum=10,
-                                        step=1,
-                                        value=3,
-                                    )
-
-                            gr.Markdown("## Advanced Settings", label="Advanced Settings")
-                            with gr.Column():
-                                burn_subtitles_input = gr.Checkbox(label="Burn Subtitles?", value=False)
-                                original_audio_volume_input = gr.Slider(
-                                    label="Original Audio Volume",
-                                    minimum=0.0,
-                                    maximum=0.4,
-                                    step=0.01,
-                                    value=0.02  # Default volume
+                        with gr.Column():
+                            gr.Markdown("## Keyframe Extraction Settings")
+                            with gr.Row():
+                                keyframe_extraction_method_input = gr.Radio(
+                                    label="Keyframe Extraction Method",
+                                    choices=["Threshold", "Number"],
+                                    value="Number"
+                                )
+                            with gr.Row():
+                                keyframe_threshold_input = gr.Slider(
+                                    label="Keyframe Change Threshold",
+                                    minimum=1,
+                                    maximum=100,
+                                    step=1,
+                                    value=30,
+                                    visible=False
+                                )
+                                num_keyframes_input = gr.Slider(
+                                    label="Number of Keyframes",
+                                    minimum=2,
+                                    maximum=50,
+                                    step=1,
+                                    value=20,
+                                    visible=True
+                                )
+                            with gr.Row():
+                                keyframes_per_segment_input = gr.Slider(
+                                    label="Keyframes per Segment",
+                                    minimum=1,
+                                    maximum=10,
+                                    step=1,
+                                    value=3
                                 )
 
+                        gr.Markdown("## Advanced Settings")
+                        with gr.Column():
+                            burn_subtitles_input = gr.Checkbox(label="Burn Subtitles?", value=False)
+                            original_audio_volume_input = gr.Slider(
+                                label="Original Audio Volume",
+                                minimum=0.0,
+                                maximum=0.4,
+                                step=0.01,
+                                value=0.02
+                            )
+
                     with gr.Column(scale=1):
-                        gr.Markdown("## Model Settings", label="Model Settings")
+                        gr.Markdown("## Model Settings")
                         with gr.Column():
                             with gr.Row():
-                                model_choice_input = gr.Radio(label="Model Choice", choices=["Claude", "gpt"], value="Claude")
-                                speed_factor_input = gr.Slider(label="Playback Speed", minimum=0.5, maximum=2.0, step=0.1, value=1.0)
+                                model_choice_input = gr.Radio(
+                                    label="Model Choice",
+                                    choices=["Claude", "gpt"],
+                                    value="Claude"
+                                )
+                                speed_factor_input = gr.Slider(
+                                    label="Playback Speed",
+                                    minimum=0.5,
+                                    maximum=2.0,
+                                    step=0.1,
+                                    value=1.0
+                                )
                             style_instructions_input = gr.Textbox(
                                 label="Style Instructions",
                                 placeholder="e.g. 'Narrate like a sports commentator' or 'Use a reflective, internal monologue style'",
                                 value=""
                             )
+                        
                         with gr.Column():
-                            gr.Markdown("## Text-to-Speech Engine Settings", label="Text-to-Speech Engine Settings")
+                            gr.Markdown("## Text-to-Speech Engine Settings")
                             with gr.Column():
                                 with gr.Row():
                                     tts_engine_input = gr.Radio(
@@ -340,67 +369,86 @@ if __name__ == "__main__":
                                     elevenlabs_voice_input = gr.Dropdown(
                                         label="ElevenLabs Voice",
                                         choices=[f"{voice_name} ({voice_id})" for voice_id, voice_name in initial_elevenlabs_voices],
-                                        value=default_elevenlabs_voice,  # Use default value
-                                        allow_custom_value=True,  # Allow custom value
+                                        value=default_elevenlabs_voice,
+                                        allow_custom_value=True,
                                         visible=True
-                                        )
+                                    )
                                     elevenlabs_model_input = gr.Dropdown(
                                         label="ElevenLabs Model",
                                         choices=initial_elevenlabs_models,
-                                        value=default_elevenlabs_model,  # Use default value
-                                        allow_custom_value=True,  # Allow custom value
+                                        value=default_elevenlabs_model,
+                                        allow_custom_value=True,
                                         visible=True
-                                        )
+                                    )
                                     google_tts_voice_input = gr.Dropdown(
                                         label="Google TTS Voice",
                                         choices=[f"{voice_name} ({lang_code})" for voice_name, lang_code in initial_google_tts_voices],
-                                        value=default_google_tts_voice,  # Use default value
-                                        allow_custom_value=True,  # Allow custom value
+                                        value=default_google_tts_voice,
+                                        allow_custom_value=True,
                                         visible=False
-                                        )
+                                    )
 
                 with gr.Column():
-                     gr.Markdown("## Examples", label="Examples")
-                     gr.Examples(
+                    gr.Markdown("## Examples")
+                    gr.Examples(
                         examples=[
-                            ["examples/vid1.mp4", "Number", 20, None, "ElevenLabs", "David Attenboro (DBZ3Yn0vZCfYBbj7kyCY)", "eleven_flash_v2_5", None, "gpt", 1.0, "make it funny", False, 3, 0.02],
-                            ["examples/vid2.mp4", "Threshold", 20, None, "ElevenLabs", "David Attenboro (DBZ3Yn0vZCfYBbj7kyCY)", "eleven_flash_v2_5", "gpt", 1.0, "you are a FOULED MOUTH gangsta rapper using NONSTOP profanity , mocking Freddy Mercury saying his a gay ass bitch and swears like a motherfucker hates every move he does NONSTOP SWEARING FOUL MOUTH, ROAST !!! ROAST NON STOP WITH NO MERCIES ONLY EVIL PROFANE HARD LANGUAGE", True, 3, 0.02],
-                            ["examples/vid3.mp4", "Number", 10, None, "ElevenLabs", "David Attenboro (DBZ3Yn0vZCfYBbj7kyCY)", "eleven_flash_v2_5", None, "gpt", 1.0, "you are a gangsta rapper using profanity , narrate this gameplay, spectating the players playing lethal company, insult each one that is present in the spectate, ALWAYS MENTION the spectated character's name the name of the player that is spectated is written in red on top of the screen). pay attention to text changes in the frames if happening. and the dea list", False, 3, 0.02]
+                            ["examples/vid1.mp4", "Number", 20, None, "ElevenLabs", "David Attenboro (DBZ3Yn0vZCfYBbj7kyCY)", 
+                             "eleven_flash_v2_5", None, "gpt", 1.0, "make it funny", False, 3, 0.02],
+                            ["examples/vid2.mp4", "Threshold", 20, None, "ElevenLabs", "David Attenboro (DBZ3Yn0vZCfYBbj7kyCY)",
+                             "eleven_flash_v2_5", "gpt", 1.0, "you are a FOULED MOUTH gangsta rapper using NONSTOP profanity", True, 3, 0.02],
+                            ["examples/vid3.mp4", "Number", 10, None, "ElevenLabs", "David Attenboro (DBZ3Yn0vZCfYBbj7kyCY)",
+                             "eleven_flash_v2_5", None, "gpt", 1.0, "you are a gangsta rapper using profanity", False, 3, 0.02]
                         ],
-                         inputs=[
-                                video_input,
-                                keyframe_extraction_method_input,
-                                keyframe_threshold_input,
-                                num_keyframes_input,
-                                tts_engine_input,
-                                elevenlabs_voice_input,
-                                elevenlabs_model_input,
-                                google_tts_voice_input,
-                                model_choice_input,
-                                speed_factor_input,
-                                style_instructions_input,
-                                burn_subtitles_input,
-                                keyframes_per_segment_input,
-                                original_audio_volume_input
-                         ],
-                     )
-
-
+                        inputs=[
+                            video_input,
+                            keyframe_extraction_method_input,
+                            keyframe_threshold_input,
+                            num_keyframes_input,
+                            tts_engine_input,
+                            elevenlabs_voice_input,
+                            elevenlabs_model_input,
+                            google_tts_voice_input,
+                            model_choice_input,
+                            speed_factor_input,
+                            style_instructions_input,
+                            burn_subtitles_input,
+                            keyframes_per_segment_input,
+                            original_audio_volume_input
+                        ],
+                    )
 
             with gr.Column(scale=1):  # Output elements column (narrower, on right)
                 processing_feedback = gr.Markdown("")
                 processed_video_output = gr.Video(label="Processed Video with Narration")
-                # Define the button to trigger processing
                 submit_button = gr.Button("Process Video", variant="primary", icon="logo.png")
 
-        # Show/hide keyframe_threshold based on extraction method
+        def show_processing_output(state, video_path=None):
+            """Show processing status and video output."""
+            if state == "processing":
+                return gr.Markdown("Processing... Please wait, this can take a while."), None
+            elif state == "done":
+                if video_path:
+                    return gr.Markdown("Done! Processing is completed and the video is available."), video_path
+                else:
+                    return gr.Markdown(""), None
+            elif state == "idle":
+                return gr.Markdown("Ready! Please provide a video input and click the \"Process Video\" Button"), None
+            else:
+                return gr.Markdown("Error Occurred"), None
+
+        def update_video_preview(video_input):
+            """Update the video preview when a new video is uploaded."""
+            if video_input:
+                return gr.update(width=150, height=100, value=video_input)
+            return gr.update(value=None)
+
+        # Event handlers
         keyframe_extraction_method_input.change(
             fn=lambda method: (gr.update(visible=method == "Threshold"), gr.update(visible=method == "Number")),
             inputs=keyframe_extraction_method_input,
             outputs=[keyframe_threshold_input, num_keyframes_input]
         )
 
-        # Show/hide voice selection based on TTS engine selection
         tts_engine_input.change(
             fn=lambda engine: (
                 gr.update(visible=engine == "Google Cloud TTS"),
@@ -411,21 +459,15 @@ if __name__ == "__main__":
             outputs=[google_tts_voice_input, elevenlabs_voice_input, elevenlabs_model_input]
         )
 
-        def update_video_preview(video_input):
-            if video_input:
-                return {uploaded_video_preview: gr.update(width=150, height=100, value=video_input)}
-            else:
-                return {uploaded_video_preview: gr.update(value=None)}
-
         video_input.change(
             fn=update_video_preview,
             inputs=video_input,
-            outputs=uploaded_video_preview,
+            outputs=uploaded_video_preview
         )
 
         submit_button.click(
-           fn=process_video,
-           inputs=[
+            fn=process_video,
+            inputs=[
                 video_input,
                 keyframe_extraction_method_input,
                 keyframe_threshold_input,
@@ -441,32 +483,43 @@ if __name__ == "__main__":
                 keyframes_per_segment_input,
                 original_audio_volume_input,
                 processing_state
-           ],
-           outputs=[
-                processed_video_output,
+            ],
+            outputs=[
+                processed_video_output,  # Output video path
+                gr.State(),  # script_filename
+                gr.State(),  # last_audio_path
+                gr.State(),  # sequence_image_path
                 processing_state
-           ]
-       )
+            ],
+            show_progress="full"
+        )
 
-        def show_processing_output(state, video_path):
-            if state == "processing":
-                return "Processing... Please wait, this can take a while.", None
-            elif state == "done":
-                if video_path.all():
-                    return "Done! Processing is completed and the video is available.", video_path
-                else:
-                    return "Done! But no keyframes where generated. Make sure the video is valid", None
-
-            elif state == "idle":
-                return "Ready! Please provide a video input and click the \"Process Video\" Button", None
-
-            else:
-                return "Error Occurred", None
-
+        # Monitor processing state changes
         processing_state.change(
             fn=show_processing_output,
-            inputs=[processing_state],
-            outputs=[processing_feedback]
+            inputs=[processing_state, processed_video_output],
+            outputs=[processing_feedback, processed_video_output],
+            show_progress=False
         )
-        demo.load(lambda: ( "idle" , None), outputs=[processing_state])
-    demo.launch(debug=True, favicon_path="favicon.ico")
+
+        # Update video display when processing is done
+        def update_video_display(state, video_path):
+            if state == "done" and video_path:
+                return video_path
+            return None
+
+        processing_state.change(
+            fn=update_video_display,
+            inputs=[processing_state, processed_video_output],
+            outputs=processed_video_output,
+            show_progress=False
+        )
+
+        # Initialize the UI
+        demo.load(
+            fn=lambda: ("idle", None, gr.Markdown("Ready to process videos"), None),
+            outputs=[processing_state, processed_video_output, processing_feedback, uploaded_video_preview]
+        )
+
+    # Launch the demo
+    demo.launch(debug=True, favicon_path="favicon.ico", inbrowser=True)
