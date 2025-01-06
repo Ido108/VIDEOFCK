@@ -63,7 +63,7 @@ Before using VideoFck (by LordHaziza), ensure you have the following:
 1.  **Upload Video:** Upload a video file using the file input component.
 2.  **Keyframe Settings:** Choose your keyframe extraction method and settings.
     *  **Threshold**: extract keyframes based on the threshold parameter
-    *  **Number**: extract a specific number of keyframes, evenly spaced in the video.
+    *  **Number (recommended)**: extract a specific number of keyframes, evenly spaced in the video.
     *   Adjust `keyframes per segment` to control the number of keyframes that are given to the LLM for caption and narration generation.
 3.  **Model Settings:**
     *   Choose between the **Claude** or **GPT** model for captions and narrations.
