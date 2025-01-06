@@ -1,4 +1,6 @@
 @echo off
+setlocal
+
 echo Setting up the environment for the video processing app...
 
 :: Step 1: Check if Python is installed
@@ -120,27 +122,18 @@ echo     return keys_present
 echo config.py file created and populated.
 
 
-:: Step 8: Create start.bat with icon and application launch
-echo Creating start.bat file with icon and application launch...
+:: Step 8: Create start.bat with application launch
+echo Creating start.bat file with application launch...
 
 (
 echo @echo off
 echo cd %~dp0
 echo call venv\Scripts\activate
-echo python app.py
+echo start "" python app.py
 ) > start.bat
 
-:: Add a registry tweak to add icon to batch file start.bat
-echo Adding icon to batch file...
-echo Windows Registry Editor Version 5.00 > temp.reg
-echo. >> temp.reg
-echo [HKEY_CLASSES_ROOT\batfile\DefaultIcon] >> temp.reg
-echo @="\"%~dp0icon.ico\",0" >> temp.reg
-echo.
-reg import temp.reg
-del temp.reg
 
-echo Setup complete. A start.bat file with the icon and start command is created.
+echo Setup complete. A start.bat file with the start command is created.
 echo You can now run the app with start.bat.
 
 pause
