@@ -10,8 +10,7 @@ Follow these steps to set up VideoFck (by LordHaziza) on your local machine:
 
 1.  **Clone the Repository:**
     ```bash
-    git clone https://github.com/Ido108/VIDEOFCK.git # Replace with your repo url
-    cd VIDEOFCK
+    git clone https://github.com/Ido108/VIDEOFCK.git
     ```
 2.  **Run the Setup Script:**
 
