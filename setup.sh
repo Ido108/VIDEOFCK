@@ -78,31 +78,6 @@ if [[ ! -z "$gemini_api_key" ]]; then
     echo "GEMINI_API_KEY=$gemini_api_key" >> .env
 fi
 
-
-# LANGCHAIN_TRACING_V2
-read -r -p "Enable Langchain Tracing V2 (true/false): " langchain_tracing_v2
-if [[ ! -z "$langchain_tracing_v2" ]]; then
-  echo "LANGCHAIN_TRACING_V2=$langchain_tracing_v2" >> .env
-fi
-
-# LANGCHAIN_ENDPOINT
-read -r -p "Enter your Langchain endpoint: " langchain_endpoint
-if [[ ! -z "$langchain_endpoint" ]]; then
-    echo "LANGCHAIN_ENDPOINT=\"$langchain_endpoint\"" >> .env
-fi
-
-# LANGCHAIN_API_KEY
-read -r -p "Enter your Langchain API key: " langchain_api_key
-if [[ ! -z "$langchain_api_key" ]]; then
-    echo "LANGCHAIN_API_KEY=\"$langchain_api_key\"" >> .env
-fi
-
-# LANGCHAIN_PROJECT
-read -r -p "Enter your Langchain project name: " langchain_project
-if [[ ! -z "$langchain_project" ]]; then
-    echo "LANGCHAIN_PROJECT=\"$langchain_project\"" >> .env
-fi
-
 # GOOGLE_APPLICATION_CREDENTIALS (Optional, only prompted if gcloud SDK is installed)
 if command_exists gcloud; then
   read -r -p "Enter the full path to your Google Application Credentials JSON file (optional): " google_app_cred

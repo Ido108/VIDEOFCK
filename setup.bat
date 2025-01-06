@@ -80,10 +80,10 @@ if not "%gemini_api_key%"=="" (
     echo GEMINI_API_KEY=%gemini_api_key% >> .env
 )
 
-:: GOOGLE_APPLICATION_CREDENTIALS (path to json) (Optional for Google TTS. help: https://cloud.google.com/text-to-speech/docs/authentication )
+:: GOOGLE_APPLICATION_CREDENTIALS
 where gcloud >nul 2>&1
 if %errorlevel% equ 0 (
-    set /p google_app_cred="Enter the full path to your Google Application Credentials JSON file (optional): "
+    set /p google_app_cred="Enter the full path to your Google Application Credentials JSON file (Optional for Google TTS. help: https://cloud.google.com/text-to-speech/docs/authentication ): "
     if not "%google_app_cred%"=="" (
       echo GOOGLE_APPLICATION_CREDENTIALS="%google_app_cred%" >> .env
     )
@@ -134,17 +134,17 @@ echo start "" python app.py
 
 
 echo Setup complete. A start.bat file with the start command is created.
-echo #
-echo #
-echo #
+echo *
+echo *
+echo *
 echo ===================================================================
 echo ===================================================================
 echo INSTALL FINISHED YOU LAZY A** B***! Provided by Haziza, the one and only.
 echo ===================================================================
-echo #
-echo #
-echo #
-echo #
+echo *
+echo *
+echo *
+echo *
 echo *** You can now run the app with start.bat ***
 
 pause
