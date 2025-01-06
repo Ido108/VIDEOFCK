@@ -3,17 +3,6 @@
 
 # VideoFck (by LordHaziza): AI-Powered Video Narration App
 
-**VideoFck (by LordHaziza)** is a Streamlit application that automatically generates narrations for your videos using AI. It extracts keyframes, creates captions, synthesizes speech, and merges the audio back into the video, with the option to add burned-in subtitles. This tool supports multiple AI models for captioning and narration, and offers flexibility in text-to-speech engines and voice selection.
-
-## Features
-
-*   **Automatic Keyframe Extraction:** Extracts keyframes from your video using either threshold-based or fixed-number methods.
-*   **AI-Powered Captions & Narration:** Generates contextually relevant captions and narrations using large language models (LLMs).
-*   **Text-to-Speech (TTS) Integration:** Supports Google Cloud TTS and ElevenLabs, allowing you to select voices and adjust speed.
-*   **Subtitles:** Option to burn subtitles directly into the output video.
-*   **Customizable Narration:** Includes prompts to adjust narration style, tone, and perspective.
-*   **Flexible Model Choice:** Supports multiple AI models such as Claude and GPT for captioning and narration.
-*  **Cross-Platform Setup:** Provides setup scripts for both Windows and macOS/Linux.
 
 ## Setup Instructions
 
@@ -40,6 +29,19 @@ Follow these steps to set up VideoFck (by LordHaziza) on your local machine:
 3.  **Run the application:**
     *   **Windows:** Double-click `start.bat`
     *   **macOS/Linux:** Run `./start.sh`
+
+
+**VideoFck (by LordHaziza)** is a Streamlit application that automatically generates narrations for your videos using AI. It extracts keyframes, creates captions, synthesizes speech, and merges the audio back into the video, with the option to add burned-in subtitles. This tool supports multiple AI models for captioning and narration, and offers flexibility in text-to-speech engines and voice selection.
+
+## Features
+
+*   **Automatic Keyframe Extraction:** Extracts keyframes from your video using either threshold-based or fixed-number methods.
+*   **AI-Powered Captions & Narration:** Generates contextually relevant captions and narrations using large language models (LLMs).
+*   **Text-to-Speech (TTS) Integration:** Supports Google Cloud TTS and ElevenLabs, allowing you to select voices and adjust speed.
+*   **Subtitles:** Option to burn subtitles directly into the output video.
+*   **Customizable Narration:** Includes prompts to adjust narration style, tone, and perspective.
+*   **Flexible Model Choice:** Supports multiple AI models such as Claude and GPT for captioning and narration.
+*  **Cross-Platform Setup:** Provides setup scripts for both Windows and macOS/Linux.
 
 ## Prerequisites
 
