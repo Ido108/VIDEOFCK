@@ -90,7 +90,7 @@ def fetch_google_tts_voices():
                 voices.append((voice.name, language_code))  # Store voice name and language code
         return voices
     except Exception as e:
-        logging.error(f"Error fetching voices from Google Cloud TTS: {e}")
+        logging.info(f"Google Cloud TTS not fetched, Only Elevenlabs api available (set google client cerds for tts support) {e}")
         return []
 
 def process_video(
