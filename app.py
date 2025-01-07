@@ -8,6 +8,11 @@ import requests  # For API calls
 from moviepy.video.io.VideoFileClip import VideoFileClip
 from PIL import Image
 import numpy as np
+from utils.logging_setup import setup_logging
+
+log_file = setup_logging(app_name="videofck")
+print(f"Process logs are being written to: {log_file}")
+logging.info(f"Process logs location: {log_file}")
 
 # Utility functions
 from utils.video_utils import (
@@ -193,6 +198,7 @@ def process_video(
         style_instructions,
         keyframes_per_segment  # Pass the new parameter
     )
+    logging.debug(f"Raw API Responses: {json.dumps(api_responses, indent=2)}")
 
     if not script_data:
         return "Error: No script data could be generated.", None, None, None, processing_state
@@ -208,6 +214,8 @@ def process_video(
     with open(script_filename, "w", encoding="utf-8") as f:
         json.dump(script_data, f, indent=2, ensure_ascii=False)  # ensure_ascii=False
     logging.info(f"Saved narration script to {script_filename}")
+    logging.debug(f"Generated Script Data: {json.dumps(script_data, indent=2)}")
+
 
     # Generate TTS for each narration segment
     audio_files = []
@@ -522,4 +530,4 @@ if __name__ == "__main__":
         )
 
     # Launch the demo
-    demo.launch(debug=True, favicon_path="favicon.ico", inbrowser=True)
+    demo.launch(debug=False, favicon_path="favicon.ico", inbrowser=True)

@@ -11,6 +11,7 @@ import subprocess
 # For subtitles:
 from moviepy.video.tools.subtitles import file_to_subtitles, SubtitlesClip
 from moviepy import CompositeVideoClip, TextClip
+logger = logging.getLogger(__name__)
 
 
 def create_video_with_audio(video_path, audio_paths, timestamps, output_path, original_audio_volume=1.0):

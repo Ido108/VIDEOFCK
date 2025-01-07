@@ -12,6 +12,8 @@ from PIL import Image
 from io import BytesIO
 from utils.video_utils import create_sequence_image_for_segment
 
+logger = logging.getLogger(__name__)
+
 current_time = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
 def extract_timestamp(filename):
