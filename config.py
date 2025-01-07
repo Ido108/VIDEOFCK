@@ -15,9 +15,6 @@ GOOGLE_APPLICATION_CREDENTIALS = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
 def verify_api_keys():
     """Verify that all necessary API keys are set."""
     keys_present = True
-    if not GEMINI_API_KEY:
-        print("Error: GEMINI_API_KEY not found in environment variables.")
-        keys_present = False
     if not ELEVENLABS_API_KEY:
-        print("Warning: ELEVENLABS_API_KEY not found. ElevenLabs TTS will not be available.")
+        print("Warning: ELEVENLABS_API_KEY not found. ElevenLabs TTS will not be available. TO SET KEYS, OPEN .env FILE")
     return keys_present
