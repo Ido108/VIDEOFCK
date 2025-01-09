@@ -12,3 +12,5 @@ pydub
 elevenlabs
 opencv-python
 gradio
+ffmpeg-python
+openai-whisper
