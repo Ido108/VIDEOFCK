@@ -12,6 +12,8 @@ import subprocess
 from moviepy.video.tools.subtitles import file_to_subtitles, SubtitlesClip
 from moviepy import CompositeVideoClip, TextClip
 logger = logging.getLogger(__name__)
+import subprocess
+from utils.asr_utils import transcribe_audio, format_transcript_to_srt   # <--- Correct import
 
 
 def create_video_with_audio(video_path, audio_paths, timestamps, output_path, original_audio_volume=1.0):
@@ -89,85 +91,62 @@ def create_video_with_audio(video_path, audio_paths, timestamps, output_path, or
         if video_clip:
             video_clip.close()
 
-def make_srt_from_script_data(script_data, srt_output_path):
-    """Generate an SRT subtitle file from the narration script data."""
-    def to_srt_time(seconds):
-        hours = int(seconds // 3600)
-        minutes = int((seconds % 3600) // 60)
-        secs = int(seconds % 60)
-        millis = int((seconds - int(seconds)) * 1000)
-        return f"{hours:02}:{minutes:02}:{secs:02},{millis:03}"
-
+def add_subtitles_to_video(input_video, srt_file, output_video):
+    """Burns subtitles into the video using FFmpeg."""
     try:
-        with open(srt_output_path, "w", encoding="utf-8") as f:
-            for i, segment in enumerate(script_data, start=1):
-                time_str = segment["timestamp"]
-                start_str, end_str = time_str.split('-')
-                start_sec = float(start_str)
-                end_sec = float(end_str)
+        if not os.path.exists(srt_file):
+            logging.error(f"SRT file not found: {srt_file}. Skipping subtitle burn-in.")
+            return input_video  # Return original video without subtitles
 
-                start_srt = to_srt_time(start_sec)
-                end_srt = to_srt_time(end_sec)
+        logging.info("Burning subtitles into the video.")
 
-                f.write(f"{i}\n")
-                f.write(f"{start_srt} --> {end_srt}\n")
-                f.write(f"{segment['narration']}\n\n")
-
-        logging.info(f"Created SRT subtitles at: {srt_output_path}")
-        return srt_output_path
-    except Exception as e:
-        logging.error(f"Error creating SRT file: {e}")
-        return None
-
-def add_subtitles_to_video(input_video, srt_file, output_video, burn_in=False):
-    """
-    Burn subtitles into the video by re-encoding.
-    This time using MoviePy's 'file_to_subtitles' + 'SubtitlesClip' approach
-    instead of the FFmpeg subtitles filter.
-    """
-
-    try:
-        if not burn_in:
-            # If burn_in is False, just return the original video path
-            logging.info("burn_in=False, so skipping subtitles.")
-            return input_video
-
-        logging.info("Burning subtitles with MoviePy's SubtitlesClip approach.")
-
-        # 1) Load the main video
-        base_clip = VideoFileClip(input_video)
-
-        # 2) Convert SRT into a list of ((start, end), text) using file_to_subtitles
-        subtitles_data = file_to_subtitles(srt_file)  # e.g. [((0, 5), "Hello"), ...]
-
-        # 3) A generator function for each subtitle text (styling)
-        def make_textclip(txt):
-            # You can customize color, stroke, etc.
-            return (TextClip(txt, font="Arial", color='white', stroke_color='black', stroke_width=2)
-                    .on_color(size=(base_clip.w, None), color=(0,0,0,0))  # transparent background
-                    .set_position(("center", "bottom")))
-
-        # 4) Create a SubtitlesClip, which is a VideoClip of timed subtitles
-        subs_clip = SubtitlesClip(subtitles_data, make_textclip=make_textclip)
-
-        # 5) Composite the subtitles on top of the base video
-        final_clip = base_clip if subs_clip is None else CompositeVideoClip([base_clip, subs_clip])
-
-        # 6) Write the final clip to output, re-encoding with libx264
-        final_clip.write_videofile(
+        command = [
+            "ffmpeg",
+            "-i", input_video,
+            "-vf", f"subtitles={srt_file.replace(os.sep, '/')}:force_style='Fontsize=18,BorderColor=&H000000,BorderStyle=3,Outline=1,Shadow=1,MarginV=10'",
+            "-c:v", "libx264",
+            "-c:a", "aac",
             output_video,
-            codec='libx264',
-            audio_codec='aac',
-            temp_audiofile='temp_sub_audio.m4a',
-            remove_temp=True,
-            fps=base_clip.fps
-        )
+            "-y"
+        ]
 
-        logging.info(f"Successfully burned subtitles with MoviePy: {output_video}")
+        process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        stdout, stderr = process.communicate()
+
+        if stderr:
+            error_message = stderr.decode('utf-8', errors='ignore')
+            logging.error(f"FFmpeg stderr: {error_message}")
+
+        if process.returncode != 0:
+            logging.error("FFmpeg failed to burn subtitles into the video.")
+            return input_video  # Return original video without subtitles
+
+        logging.info(f"Successfully burned subtitles into the video: {output_video}")
         return output_video
 
     except Exception as e:
-        logging.error(f"Error adding subtitles to video: {e}")
+        logging.exception("Error occurred during subtitle burning:")
+        return input_video
+
+def process_video_with_subtitles(audio_path, video_path, output_video_path):
+    """End-to-end process for transcribing, generating subtitles, and burning them into a video."""
+    try:
+        transcription_data = transcribe_audio(audio_path)
+        if not transcription_data:
+            logging.error("Failed to transcribe audio. Exiting process.")
+            return None
+
+        srt_path = os.path.splitext(audio_path)[0] + ".srt"
+        format_transcript_to_srt(transcription_data, srt_path)
+
+        if not os.path.exists(srt_path):
+            logging.error("SRT file generation failed. Exiting process.")
+            return None
+
+        return add_subtitles_to_video(video_path, srt_path, output_video_path)
+
+    except Exception as e:
+        logging.exception("Error during the video processing pipeline:")
         return None
     
 def extract_timestamp(filename):

@@ -18,14 +18,15 @@ logging.info(f"Process logs location: {log_file}")
 from utils.video_utils import (
     extract_key_frames,
     create_video_with_audio,
-    make_srt_from_script_data,
-    add_subtitles_to_video
+    # make_srt_from_script_data,  # <-- Removed since we now do Whisper-based subtitles
+    add_subtitles_to_video,
+    process_video_with_subtitles  # <-- We use this for the Whisper-based approach
 )
 from utils.gemini_utils import generate_captions_and_narrations
 from utils.tts_utils import generate_text_to_speech
 from config import verify_api_keys, ELEVENLABS_API_KEY
 
-#Logo path
+# Logo path
 LOGO_PATH = "logo.png"
 
 def fetch_elevenlabs_voices():
@@ -111,7 +112,6 @@ def process_video(
     progress=gr.Progress(track_tqdm=True),
     processing_state=None
 ):
-
     """
     Main function to orchestrate video processing, captioning, TTS,
     with optional burned-in subtitles using MoviePy's file_to_subtitles.
@@ -156,7 +156,7 @@ def process_video(
         logging.error(f"Error copying video: {e}")
         return "Error copying video file.", None, None, None, processing_state
 
-     # Load prompts
+    # Load prompts
     if model_choice == "gpt":
         with open("prompts/multi_image_segmented_prompt.txt", "r", encoding="utf-8") as f:
             base_caption_prompt = f.read().strip()
@@ -216,7 +216,6 @@ def process_video(
     logging.info(f"Saved narration script to {script_filename}")
     logging.debug(f"Generated Script Data: {json.dumps(script_data, indent=2)}")
 
-
     # Generate TTS for each narration segment
     audio_files = []
     for idx, entry in enumerate(script_data):
@@ -225,6 +224,7 @@ def process_video(
         audio_path = os.path.join(project_folder, audio_filename)
         audio_files.append(audio_path)
 
+        # Generate TTS using your existing function
         if not generate_text_to_speech(
             narration_text,
             audio_path,
@@ -239,21 +239,31 @@ def process_video(
 
     timestamps = [float(entry["timestamp"].split('-')[0]) for entry in script_data]
     output_video_path = os.path.join(project_folder, "output_video.mp4")
-    final_video_path = create_video_with_audio(video_path, audio_files, timestamps, output_video_path, original_audio_volume)  # Pass original_audio_volume
+    final_video_path = create_video_with_audio(
+        video_path, audio_files, timestamps, output_video_path, original_audio_volume
+    )
 
     if not final_video_path:
         return "Error: Could not combine video with audio.", None, None, None, processing_state
 
-    # (Optional) Burn subtitles with MoviePy
+    # (Optional) Burn subtitles with Whisper on the final video
     final_result_path = final_video_path
     if burn_subtitles:
-        srt_path = os.path.join(project_folder, "output_subtitles.srt")
-        if make_srt_from_script_data(script_data, srt_path):
-            # Use add_subtitles_to_video with burn_in=True
-            subbed_video_path = os.path.join(project_folder, "output_video_with_subs.mp4")
-            sub_done = add_subtitles_to_video(final_video_path, srt_path, subbed_video_path, burn_in=True)
-            if sub_done:
-                final_result_path = subbed_video_path  # subbed_video_path
+        # 1) Extract audio from the final TTS-laden video
+        final_video_audio_path = os.path.join(project_folder, "temp_final_video_audio.mp3")
+        ffmpeg_cmd = f'ffmpeg -i "{final_video_path}" -q:a 0 -map 0:a? "{final_video_audio_path}" -y'
+        logging.info(f"Extracting final video audio:\n{ffmpeg_cmd}")
+        os.system(ffmpeg_cmd)
+
+        # 2) Use the Whisper-based approach from video_utils.process_video_with_subtitles
+        subbed_video_path = os.path.join(project_folder, "output_video_with_subs.mp4")
+        sub_done = process_video_with_subtitles(
+            audio_path=final_video_audio_path,
+            video_path=final_video_path,
+            output_video_path=subbed_video_path
+        )
+        if sub_done:
+            final_result_path = subbed_video_path
 
     # Return final result
     last_audio_path = audio_files[-1] if audio_files else None
@@ -261,8 +271,9 @@ def process_video(
     return final_result_path, script_filename, last_audio_path, get_sequence_image_path(project_folder), processing_state
 
 def get_sequence_image_path(project_folder):
-     # Extract keyframes sequence image
-    return os.path.join(project_folder, "keyframes_sequence.jpg") if os.path.exists(os.path.join(project_folder, "keyframes_sequence.jpg")) else None
+    # Extract keyframes sequence image
+    seq_image = os.path.join(project_folder, "keyframes_sequence.jpg")
+    return seq_image if os.path.exists(seq_image) else None
 
 if __name__ == "__main__":
     # Fetch voices and models on startup
@@ -291,7 +302,7 @@ if __name__ == "__main__":
                     with gr.Row():
                         gr.Markdown('<p style="font-size: 15px; color: black">Upload a video to get started</p>')
                     with gr.Row():
-                        uploaded_video_preview = gr.Video(label="Uploaded Video", width=150, height=100)  # small preview
+                        uploaded_video_preview = gr.Video(label="Uploaded Video", width=150, height=100)
                     with gr.Row():
                         video_input = gr.File(file_count='single', file_types=["video"], label="Upload/Drag a Video")
 
@@ -333,7 +344,7 @@ if __name__ == "__main__":
 
                         gr.Markdown("## Advanced Settings")
                         with gr.Column():
-                            burn_subtitles_input = gr.Checkbox(label="Burn Subtitles?", value=False, visible=False)
+                            burn_subtitles_input = gr.Checkbox(label="Burn Subtitles?", value=False, visible=True)
                             original_audio_volume_input = gr.Slider(
                                 label="Original Audio Volume",
                                 minimum=0.0,
@@ -400,12 +411,44 @@ if __name__ == "__main__":
                     gr.Markdown("## Examples")
                     gr.Examples(
                         examples=[
-                            ["examples/vid1.mp4", "Number", 20, None, "ElevenLabs", "David Attenboro (DBZ3Yn0vZCfYBbj7kyCY)", 
-                             "eleven_flash_v2_5", None, "gpt", 1.0, "make it funny", False, 3, 0.02],
-                            ["examples/vid2.mp4", "Threshold", 20, None, "ElevenLabs", "David Attenboro (DBZ3Yn0vZCfYBbj7kyCY)",
-                             "eleven_flash_v2_5", "gpt", 1.0, "you are a FOULED MOUTH gangsta rapper using NONSTOP profanity", True, 3, 0.02],
-                            ["examples/vid3.mp4", "Number", 10, None, "ElevenLabs", "David Attenboro (DBZ3Yn0vZCfYBbj7kyCY)",
-                             "eleven_flash_v2_5", None, "gpt", 1.0, "you are a gangsta rapper using profanity", False, 3, 0.02]
+                            [
+                                "examples/vid1.mp4", "Number", 20, None,
+                                "ElevenLabs",
+                                "David Attenboro (DBZ3Yn0vZCfYBbj7kyCY)",
+                                "eleven_flash_v2_5",
+                                None,
+                                "gpt",
+                                1.0,
+                                "make it funny",
+                                False,
+                                3,
+                                0.02
+                            ],
+                            [
+                                "examples/vid2.mp4", "Threshold", 20, None,
+                                "ElevenLabs",
+                                "David Attenboro (DBZ3Yn0vZCfYBbj7kyCY)",
+                                "eleven_flash_v2_5",
+                                "gpt",
+                                1.0,
+                                "you are a FOULED MOUTH gangsta rapper using NONSTOP profanity",
+                                True,
+                                3,
+                                0.02
+                            ],
+                            [
+                                "examples/vid3.mp4", "Number", 10, None,
+                                "ElevenLabs",
+                                "David Attenboro (DBZ3Yn0vZCfYBbj7kyCY)",
+                                "eleven_flash_v2_5",
+                                None,
+                                "gpt",
+                                1.0,
+                                "you are a gangsta rapper using profanity",
+                                False,
+                                3,
+                                0.02
+                            ]
                         ],
                         inputs=[
                             video_input,
@@ -425,7 +468,7 @@ if __name__ == "__main__":
                         ],
                     )
 
-            with gr.Column(scale=1):  # Output elements column (narrower, on right)
+            with gr.Column(scale=1):
                 processing_feedback = gr.Markdown("")
                 processed_video_output = gr.Video(label="Processed Video with Narration")
                 submit_button = gr.Button("Process Video", variant="primary", icon="logo.png")
@@ -452,7 +495,10 @@ if __name__ == "__main__":
 
         # Event handlers
         keyframe_extraction_method_input.change(
-            fn=lambda method: (gr.update(visible=method == "Threshold"), gr.update(visible=method == "Number")),
+            fn=lambda method: (
+                gr.update(visible=method == "Threshold"),
+                gr.update(visible=method == "Number")
+            ),
             inputs=keyframe_extraction_method_input,
             outputs=[keyframe_threshold_input, num_keyframes_input]
         )
@@ -510,7 +556,6 @@ if __name__ == "__main__":
             show_progress=False
         )
 
-        # Update video display when processing is done
         def update_video_display(state, video_path):
             if state == "done" and video_path:
                 return video_path
