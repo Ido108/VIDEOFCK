@@ -3,9 +3,9 @@ from logging.handlers import RotatingFileHandler
 import os
 import datetime
 
-def setup_logging(app_name="videofck"):
+def setup_logging(app_name="VDEOFCK"):
     # Set up a logs folder in the user's home directory
-    logs_folder = os.path.join(os.path.expanduser("~"), f"{app_name}_logs")
+    logs_folder = os.path.join(os.path.expanduser("~"), f"{app_name}")
     os.makedirs(logs_folder, exist_ok=True)
     current_time = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
 
