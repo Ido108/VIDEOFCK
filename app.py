@@ -414,7 +414,7 @@ if __name__ == "__main__":
                             [
                                 "examples/vid1.mp4", "Number", 20, None,
                                 "ElevenLabs",
-                                "David Attenboro (DBZ3Yn0vZCfYBbj7kyCY)",
+                                None,
                                 "eleven_flash_v2_5",
                                 None,
                                 "gpt",
@@ -427,7 +427,7 @@ if __name__ == "__main__":
                             [
                                 "examples/vid2.mp4", "Threshold", 20, None,
                                 "ElevenLabs",
-                                "David Attenboro (DBZ3Yn0vZCfYBbj7kyCY)",
+                                None,
                                 "eleven_flash_v2_5",
                                 "gpt",
                                 1.0,
@@ -439,7 +439,7 @@ if __name__ == "__main__":
                             [
                                 "examples/vid3.mp4", "Number", 10, None,
                                 "ElevenLabs",
-                                "David Attenboro (DBZ3Yn0vZCfYBbj7kyCY)",
+                                None,
                                 "eleven_flash_v2_5",
                                 None,
                                 "gpt",
