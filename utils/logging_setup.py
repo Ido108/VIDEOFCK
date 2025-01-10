@@ -3,7 +3,7 @@ from logging.handlers import RotatingFileHandler
 import os
 import datetime
 
-def setup_logging(app_name="VDEOFCK"):
+def setup_logging(app_name="VIDEOFCK"):
     # Set up a logs folder in the user's home directory
     logs_folder = os.path.join(os.path.expanduser("~"), f"{app_name}")
     os.makedirs(logs_folder, exist_ok=True)
