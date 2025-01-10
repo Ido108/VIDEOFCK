@@ -282,7 +282,7 @@ if __name__ == "__main__":
     initial_elevenlabs_models = fetch_elevenlabs_models()
 
     # Define default values for the dropdowns
-    default_elevenlabs_voice = "David Attenboro (DBZ3Yn0vZCfYBbj7kyCY)"
+    default_elevenlabs_voice = None
     default_elevenlabs_model = "eleven_flash_v2_5"
     default_google_tts_voice = "he-IL-Standard-B (he-IL)"
 
