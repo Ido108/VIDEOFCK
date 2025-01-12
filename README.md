@@ -7,6 +7,9 @@
 
 https://github.com/user-attachments/assets/577a2039-8bd5-4e6c-b461-f3f3538a2810
 
+**VIDEOFCK** is an open-source tool that automatically generates voiceovers and narrations for videos. It understands video content by analyzing keyframes, splits the video into segments, and produces high-quality AI-generated narration or voiceovers.
+
+---
 
 ## Setup Instructions
 
@@ -27,17 +30,13 @@ Follow these steps to set up VideoFck (by LordHaziza) on your local machine:
     *   **Windows:** Double-click `start.bat`
     *   **macOS/Linux:** Run `./start.sh`
 
-**VideoFck (by LordHaziza)** is a Streamlit application that automatically generates narrations for your videos using AI. It extracts keyframes, creates captions, synthesizes speech, and merges the audio back into the video, with the option to add burned-in subtitles. This tool supports multiple AI models for captioning and narration, and offers flexibility in text-to-speech engines and voice selection.
+## ✨ Features
 
-## Features
-
-*   **Automatic Keyframe Extraction:** Extracts keyframes from your video using either threshold-based or fixed-number methods.
-*   **AI-Powered Captions & Narration:** Generates contextually relevant captions and narrations using large language models (LLMs).
-*   **Text-to-Speech (TTS) Integration:** Supports Google Cloud TTS and ElevenLabs, allowing you to select voices and adjust speed.
-*   **Subtitles:** Option to burn subtitles directly into the output video.
-*   **Customizable Narration:** Includes prompts to adjust narration style, tone, and perspective.
-*   **Flexible Model Choice:** Supports multiple AI models such as Claude and GPT for captioning and narration.
-*  **Cross-Platform Setup:** Provides setup scripts for both Windows and macOS/Linux.
+📹 **Keyframe Analysis:** Detects important scenes in the video.  
+📝 **Segmented Processing:** Splits videos into logical segments for accurate narration.  
+🎤 **AI-Powered Narration:** Generates captions and converts them to speech using **ElevenLabs** and **Google TTS**.  
+🎨 **Custom Narration Styles:** Customize narration tone, speed, and style.  
+🎞 **Subtitles (Optional):** Burn subtitles directly into the video.  
 
 ## Prerequisites
 
@@ -55,7 +54,6 @@ Before using VideoFck (by LordHaziza), ensure you have the following:
 
 
 
-
 ## Using the Application
 
 1.  **Upload Video:** Upload a video file using the file input component.
@@ -70,5 +68,13 @@ Before using VideoFck (by LordHaziza), ensure you have the following:
 6.  **Original Audio Volume**: Change the original audio volume if needed, this is useful if you wish to keep the original audio with a low volume along with the generated narrations.
 7.  **Process Video:** Click the "Process Video" button to begin generating the output video.
 8.  **View the results:** When the app finishes, it will present you the processed video in the player, and it will show the path for where the json files and the video where saved, for your convenience.
+
+
+## 💪 Use Cases
+
+- **Content Creators:** Automate voiceovers for YouTube, TikTok, or other platforms.  
+- **Educators:** Easily create narrated educational videos.  
+- **Marketers:** Generate quick, professional promotional content.  
+- **Accessibility:** Add voice narration to improve content accessibility.  
 
 ## Enjoy mf
