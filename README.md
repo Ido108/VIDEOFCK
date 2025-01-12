@@ -3,6 +3,7 @@
 
 # VideoFck (by LordHaziza): AI-Powered Video Narration App
 
+[Watch Demo](demo.mp4)
 
 ## Setup Instructions
 
