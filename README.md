@@ -1,10 +1,7 @@
-<p align="center">
-  <img src="logo.png" alt="VideoFck Logo" width="200"/>
-</p>
-
-
-
-# VideoFck (by LordHaziza): AI-Powered Video Narration App
+<h1 align="center">
+  <img src="logo.png" alt="VideoFck Logo" width="200"/><br>
+  VideoFck (by LordHaziza): AI-Powered Video Narration App
+</h1>
 
 ![App Screenshot](Screenshot.png)
 
