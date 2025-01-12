@@ -3,7 +3,7 @@
 
 # VideoFck (by LordHaziza): AI-Powered Video Narration App
 
-![App Screenshot](./screenshot.png)
+![App Screenshot](Screenshot.png)
 
 ## Setup Instructions
 
