@@ -1,17 +1,17 @@
 <h1 align="center">
   <img src="logo.png" alt="VideoFck Logo" width="200"/><br>
-  VideoFck (by LordHaziza): AI-Powered Video Narration App
-</h1>
-
+  VideoFck (by LordHaziza): AI-Powered Video Narration App </h1>
 <h1 align="left">
-  
+
 ![App Screenshot](Screenshot.png)
 
+###
 https://github.com/user-attachments/assets/577a2039-8bd5-4e6c-b461-f3f3538a2810
 
-## **VIDEOFCK** is an open-source tool that automatically generates voiceovers and narrations for videos. It understands video content by analyzing keyframes, splits the video into segments, and produces high-quality output video with AI-generated narration or voiceovers.
+### **VIDEOFCK** is an open-source tool that automatically generates voiceovers and narrations for videos. It understands video content by analyzing keyframes, splits the video into segments, and produces high-quality output video with AI-generated narration or voiceovers.
 
 ---
+
 
 ## Setup Instructions
 
