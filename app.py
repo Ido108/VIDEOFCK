@@ -157,7 +157,7 @@ def process_video(
         return "Error copying video file.", None, None, None, processing_state
 
     # Load prompts
-    if model_choice.lower().startswith("gpt"):
+    if model_choice == "gpt":
         with open("prompts/multi_image_segmented_prompt.txt", "r", encoding="utf-8") as f:
             base_caption_prompt = f.read().strip()
         base_tts_prompt = None
@@ -359,15 +359,8 @@ if __name__ == "__main__":
                             with gr.Row():
                                 model_choice_input = gr.Radio(
                                     label="Model Choice",
-                                    choices=[
-                                        "Claude 3-5 Sonnet",
-                                        "Claude 3-7 Sonnet",
-                                        "GPT-4o",
-                                        "GPT-4.1",
-                                        "GPT-4.1-mini",
-                                        "Llama3",
-                                    ],
-                                    value="Claude 3-5 Sonnet",
+                                    choices=["Claude", "gpt"],
+                                    value="Claude"
                                 )
                                 speed_factor_input = gr.Slider(
                                     label="Playback Speed",
@@ -424,7 +417,7 @@ if __name__ == "__main__":
                                 None,
                                 "eleven_flash_v2_5",
                                 None,
-                                "GPT-4o",
+                                "gpt",
                                 1.0,
                                 "make it funny",
                                 False,
@@ -436,7 +429,7 @@ if __name__ == "__main__":
                                 "ElevenLabs",
                                 None,
                                 "eleven_flash_v2_5",
-                                "GPT-4o",
+                                "gpt",
                                 1.0,
                                 "you are a FOULED MOUTH gangsta rapper using NONSTOP profanity",
                                 True,
@@ -449,7 +442,7 @@ if __name__ == "__main__":
                                 None,
                                 "eleven_flash_v2_5",
                                 None,
-                                "GPT-4o",
+                                "gpt",
                                 1.0,
                                 "you are a gangsta rapper using profanity",
                                 False,

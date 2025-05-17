@@ -26,7 +26,7 @@ Follow these steps to set up VideoFck (by LordHaziza) on your local machine:
     *   **Windows:** Double-click the `setup.bat` file.
     *   **macOS/Linux:** Run `./setup.sh` in your terminal.
 
-    Follow the installation steps and add your API keys during the setup. The script also asks for `LLAMA_MODEL_PATH` if you want to use the local Llama3 model.
+    Follow the installation steps and add your api keys during the setup. (links to API keys for each platform provided during setup)
 
 3.  **Run the application:**
     *   **Windows:** Double-click `start.bat`
@@ -48,10 +48,9 @@ Before using VideoFck (by LordHaziza), ensure you have the following:
 *   **`pip`** (Python's package installer).
 *   **API Keys:**
     *   ElevenLabs API Key (if using ElevenLabs TTS).
-    *   OpenAI API Key (if using GPT models).
+    *   OpenAI API Key (if using GPT model).
     *   Claude API Key (if using Claude model).
     *   Gemini API Key.
-    *   Path to a local Llama 3 model file (set `LLAMA_MODEL_PATH` in `.env` if using the local model).
 ## Note: For using Google TTS You need to set your service account details and google api in the env file. More details here: https://cloud.google.com/text-to-speech/docs/authentication
 *   **Google Cloud SDK:** For Google Cloud TTS and you must install the Google Cloud SDK: [https://cloud.google.com/sdk/docs/install](https://cloud.google.com/sdk/docs/install), and have a [Google Service Account Key](https://cloud.google.com/iam/docs/keys-create-delete) which its path must be inserted when prompted (Optional). You can Always add it in ".env" file.
 
@@ -65,7 +64,7 @@ Before using VideoFck (by LordHaziza), ensure you have the following:
     *  **Number (recommended)**: extract a specific number of keyframes, evenly spaced in the video.
     *   Adjust `keyframes per segment` to control the number of keyframes that are given to the LLM for caption and narration generation.
 3.  **Model Settings:**
-    *   Choose between **Claude 3-5 Sonnet**, **Claude 3-7 Sonnet**, **GPT-4o**, **GPT-4.1**, **GPT-4.1-mini**, or **Llama3 (local)** for captions and narrations.
+    *   Choose between the **Claude** or **GPT** model for captions and narrations.
     *   Adjust playback speed and add style instructions.
 4.  **Text-to-Speech (TTS):** Select a TTS Engine (Google Cloud TTS or ElevenLabs), a voice, and model if using ElevenLabs.
 6.  **Original Audio Volume**: Change the original audio volume if needed, this is useful if you wish to keep the original audio with a low volume along with the generated narrations.
