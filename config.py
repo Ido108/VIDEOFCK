@@ -11,10 +11,13 @@ ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
 CLAUDE_API_KEY = os.getenv("CLAUDE_API_KEY")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 GOOGLE_APPLICATION_CREDENTIALS = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+LLAMA_MODEL_PATH = os.getenv("LLAMA_MODEL_PATH")
 
 def verify_api_keys():
     """Verify that all necessary API keys are set."""
     keys_present = True
     if not ELEVENLABS_API_KEY:
         print("Warning: ELEVENLABS_API_KEY not found. ElevenLabs TTS will not be available. TO SET KEYS, OPEN .env FILE")
+    if not LLAMA_MODEL_PATH:
+        print("Warning: LLAMA_MODEL_PATH not found. Local Llama model won't be available.")
     return keys_present
