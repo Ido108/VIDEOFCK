@@ -15,4 +15,3 @@ gradio
 ffmpeg-python
 openai-whisper
 torch
-llama-cpp-python
