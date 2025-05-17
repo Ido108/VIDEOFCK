@@ -77,6 +77,9 @@ prompt_and_write "CLAUDE_API_KEY" "Enter your Claude API key"
 # GEMINI_API_KEY
 prompt_and_write "GEMINI_API_KEY" "Enter your Gemini API key"
 
+# LLAMA_MODEL_PATH
+prompt_and_write "LLAMA_MODEL_PATH" "Enter the path to your local Llama model file (optional)"
+
 # GOOGLE_APPLICATION_CREDENTIALS (Optional, only prompted if gcloud SDK is installed)
 if command_exists gcloud; then
   prompt_and_write "GOOGLE_APPLICATION_CREDENTIALS" "Enter the full path to your Google Application Credentials JSON file (optional)"
@@ -100,6 +103,7 @@ ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
 CLAUDE_API_KEY = os.getenv("CLAUDE_API_KEY")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 GOOGLE_APPLICATION_CREDENTIALS = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
+LLAMA_MODEL_PATH = os.getenv("LLAMA_MODEL_PATH")
 
 def verify_api_keys():
     """Verify that all necessary API keys are set."""
@@ -113,6 +117,8 @@ def verify_api_keys():
         print("Warning: OPENAI_API_KEY not found. OpenAI services will not be available.")
     if not CLAUDE_API_KEY:
         print("Warning: CLAUDE_API_KEY not found. Claude services will not be available.")
+    if not LLAMA_MODEL_PATH:
+        print("Warning: LLAMA_MODEL_PATH not set. Local Llama model will not be available.")
     return keys_present
 EOF
 echo "config.py file created and populated"
