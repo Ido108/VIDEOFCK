@@ -290,11 +290,11 @@ if __name__ == "__main__":
         # State to store whether processing has started
         processing_state = gr.State("idle")
         
-        # Add logo
+        # Add the full brand logo as the page identity.
         if os.path.exists(LOGO_PATH):
-            logo = gr.Image(LOGO_PATH, show_label=False, container=False, width=200)
+            logo = gr.Image(LOGO_PATH, show_label=False, container=False, width=360)
         else:
-            logo = gr.Markdown("## VideoMaster")
+            logo = gr.Markdown("## VIDEOFCK")
 
         with gr.Row():
             with gr.Column(scale=3):  # Input elements column (wider)
@@ -471,7 +471,7 @@ if __name__ == "__main__":
             with gr.Column(scale=1):
                 processing_feedback = gr.Markdown("")
                 processed_video_output = gr.Video(label="Processed Video with Narration")
-                submit_button = gr.Button("Process Video", variant="primary", icon="logo.png")
+                submit_button = gr.Button("Process Video", variant="primary", icon="favicon.ico")
 
         def show_processing_output(state, video_path=None):
             """Show processing status and video output."""
