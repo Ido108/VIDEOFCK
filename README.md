@@ -1,7 +1,14 @@
-<h1 align="center">
-  <img src="logo.png" alt="VideoFck Logo" width="200"/><br>
-  VideoFck (by LordHaziza): AI-Powered Video Narration App </h1>
-<h1 align="left">
+<!-- repo-branding:start -->
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/assets/logo-horizontal-light.png">
+    <source media="(prefers-color-scheme: light)" srcset=".github/assets/logo-horizontal.png">
+    <img src=".github/assets/logo-horizontal.png" alt="VIDEOFCK" width="720">
+  </picture>
+</p>
+<!-- repo-branding:end -->
+
+<h1 align="center">VideoFck (by LordHaziza): AI-Powered Video Narration App</h1>
 
 ![App Screenshot](Screenshot.png)
 
